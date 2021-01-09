@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+   <head>
+        <title>Meetable</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+    </head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/main.js"></script>
+    <body>
+    <div class="centerdiv">
+        <div class="jumbotron">
+          <br>
+          <h4 style="text-align: center">SAMPLE TITLE</h4>
+          <h4 style="text-align: center">Here is just some random stuff for the front page</h4>
+          <hr>
+          <div class = "row " style="text-align: center;margin-top: 3vh">
+            <div class="col-xs-4 mx-auto">
+                <a class="btn btn-primary btn-lg" href="sign-in" role="button">Auth Test</a>
+            </div>
+            <div class="col-2">
+
+            </div>
+            <div class="col-xs-4 mx-auto">
+                 <a class="btn btn-side btn-lg" href = "dashboard" style = "text-decoration-color: white" href="#" role="button">Dashboard</a>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    </body>
+    <script>
+      var socket = io.connect();
+
+      var userid = getUserId()
+      socket.on('connect', () => {
+          socket.emit('getusers', socket.id);
+
+          socket.on('postusers', function(users){
+            var all_users = Object.values(users);
+            console.log(all_users);
+          });
+
+      });
+
+    </script>
+
+</html>

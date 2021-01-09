@@ -1,0 +1,12 @@
+.appa{
+    border-color: black;
+}
+
+figure{
+    width:300px;
+    overflow: hidden; 
+    margin:0; 
+}
+figure img{
+    display:block; /*remove inline-block spaces*/
+}

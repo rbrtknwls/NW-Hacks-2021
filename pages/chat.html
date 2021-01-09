@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+      .canv{
+        display: flex;
+        width: 100%;
+        align-items: stretch;
+      }
+      .sidebar{
+        min-width: 250px;
+        max-width: 250px;
+        min-height: 100vh;
+      }
+      .chat{
+        padding: 50px;
+        max-height: 100vh;
+        width: 100%;
+        background: #FF8C00;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 2px; position: absolute; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 80%; }
+      form button { width: 20%; right: 0; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; min-width: 250px}
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+      #messages { margin-bottom: 40px }
+    </style>
+  </head>
+  <body>
+    <div class = "canv">
+
+      <div class = "sidebar" style="background: rgb(130, 224, 255)">
+        <p> I LOVE SAVANNAH AND ROBBIE </p>
+      </div>
+
+      <div class = "chat">
+        <ul id="messages"></ul>
+
+      </div>
+      <form action="">
+        <input id="m" autocomplete="off" /><button>Send</button>
+      </form>
+    </div>
+
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var username = document.cookie;
+      if (username == ""){
+        username = "Anon"
+      }else{
+        username = document.cookie.split("=")[1].split("/")[1];
+      }
+      $(function () {
+        var socket = io.connect();
+        $('form').submit(function(){
+          socket.emit('chat message', username + ": " + $('#m').val());
+          $('#m').val('');
+          return false;
+        });
+        socket.on('chat message', function(msg){
+          $('#messages').append($('<li>').text(msg));
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+      });
+    </script>
+  </body>
+</html>

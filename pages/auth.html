@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+   <head>
+        <title>Sign in</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="google-signin-client_id" content="823820203616-hqenb993r8fsetfhatqtc0ftqabj5o2a.apps.googleusercontent.com">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+    </head>
+
+    <!-- Refs -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/main.js"></script>
+
+
+    <body>
+      <div class="centerdiv">
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+      </div>
+    </body>
+
+    <script>
+      var socket = io.connect();
+      function onSignIn(googleUser) {
+        var gdata = googleUser.getBasicProfile();
+
+        var profile = {
+          google_ID: gdata.getId(),
+          name: gdata.getName(),
+          image: gdata.getImageUrl(),
+          email: gdata.getEmail()
+        };
+
+        socket.emit('createuser', profile, socket.id);
+      }
+
+      socket.on('signin', function(state, id){
+        if (state == "success"){
+          setCookie("userid", id);
+          authSuccess();
+        }else{
+          alert("Login failed, please try again")
+        }
+      });
+
+
+
+
+
+    </script>
+</html>

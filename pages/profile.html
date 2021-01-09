@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+   <head>
+        <title>Profile</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+   </head>
+   <script src="js/main.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+   <body>
+
+
+     <div class="centerdiv">
+         <div class="jumbotron">
+           <div class="row">
+             <div class="col-md-8">
+                 <div class = "col">
+                     <h3 class="display-3" id = "disname"><strong>Random Name</strong></h3>
+                     <p class="display-4" id = "useranme">UnsetUsername</p>
+                 </div>
+
+             </div>
+             <div class="col-md-3">
+               <div class="card-body">
+                   <img src="https://i.picsum.photos/id/668/200/200.jpg?hmac=mVqr1fc4nHFre2QMZp5cuqUKLIRSafUtWt2vwlA9jG0" id = "pers" style = "top: 0px; object-fit: cover; border-radius: 50%; border: 1px solid" height = "200px" width = "200px"alt="...">
+               </div>
+             </div>
+           </div>
+           <hr style = "border: 20px solid">
+
+
+           <!--
+           <div class = "card">
+             <form style="padding: 20px;">
+               <div class="form-row">
+                 <div class="form-group col-md-6">
+                   <label for="inputEmail4">Name</label>
+                   <input type="text" class="form-control" id="name1" placeholder="Name">
+                 </div>
+                 <div class="form-group col-md-6">
+                   <label for="inputPassword4">Username</label>
+                   <input type="text" class="form-control" id="username" placeholder="Username">
+                 </div>
+               </div>
+               <button id="sign" type="submit" class="btn btn-primary">Sign in</button>
+             </form>
+             <a class="btn btn-secondary" href = "chat" style = "text-decoration-color: white" href="#" role="button">Chat Test</a>
+           </div>
+         </div>
+       -->
+
+   </body>
+   <script>
+     var socket = io.connect();
+
+     var userid = getUserId()
+     socket.on('connect', () => {
+       if (cookieCheck()){
+         socket.emit('getInfo', userid, socket.id);
+
+         socket.on('postInfo', function(info){
+           console.log(info);
+           document.getElementById("disname").innerHTML = info.name;
+           document.getElementById("useranme").innerHTML = info.email;
+
+         });
+       } else {
+         authFail();
+       }
+     });
+
+   </script>
+
+</html>
