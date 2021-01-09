@@ -20,6 +20,7 @@ const config = {
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
+const chat = require("./server-chat");
 
 
 app.use(express.static(__dirname + '/public'));
@@ -41,57 +42,9 @@ app.get('/dashboard', function (req, res) {
   res.sendFile(path.join(__dirname + '/pages/dash.html'));
 });
 
-
-
-
-
 server.listen(PORT);
-console.log("CHECKING PORT " + PORT)
+console.log("CHECKING PORT " + PORT);
 
-// Replace with SQL Database Later
-var users = {};
-io.on('connection', function(socket){
-
-
-  socket.on('createuser', function(profile,returnID){
-
-    console.log(users);
-    try {
-      if (profile.google_ID in users){
-        //Log in normally
-        io.to(returnID).emit('signin', 'success', profile.google_ID);
-        console.log("Norm Log");
-      }else{
-        //Create new account
-        users[profile.google_ID] = profile;
-
-        io.to(returnID).emit('signin', 'success', profile.google_ID);
-        console.log("New Account");
-
-      }
-
-    }catch (err){
-      console.log(err);
-      io.to(returnID).emit('signin', 'failure', "No ID");
-    }
-
-
-  });
-
-  socket.on('getInfo', function(id, sender){
-    console.log(id);
-    io.to(sender).emit('postInfo', users[id]);
-  });
-
-  socket.on('getUsers', function(sender){
-    console.log("Returned Users");
-    io.to(sender).emit('postUsers', users);
-  });
-
-
-  socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
-    console.log(msg);
-  });
-
+io.on("connection", (socket) => {
+	chat.initChat(io, socket);
 });
