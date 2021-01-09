@@ -8,16 +8,12 @@ var admin = require("firebase-admin");
 
 // CONSTANTS AND API KEYS
 const PORT = process.env.PORT || 3000;
-// Fetch the service account key JSON file contents
 let serviceAccount = require('./secret_shhhh.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: 'https://nw-hacks-1cba2-default-rtdb.firebaseio.com/'
 });
-
-
-// Initialize the app with a null auth variable, limiting the server's access
 
 
 
@@ -27,7 +23,7 @@ var sent = new Sent();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var db = admin.database();
-var ref = db.ref("server/saving-data/fireblog");
+var userRef = db.ref("stats");
 
 
 app.use(express.static(__dirname + '/public'));
@@ -49,10 +45,7 @@ app.get('/dashboard', function (req, res) {
   res.sendFile(path.join(__dirname + '/pages/dash.html'));
 });
 
-
-
-var usersRef = ref.child("users");
-usersRef.set({
+userRef.set({
   alanisawesome: {
     date_of_birth: "June 23, 1912",
     full_name: "Alan Turing"
@@ -82,7 +75,14 @@ io.on('connection', function(socket){
         console.log("Norm Log");
       }else{
         //Create new account
-        users[profile.google_ID] = profile;
+        var gid = profile.google_ID;
+        users[gid] = profile;
+
+        db.ref("stats/" + gid).set({
+          total_messages: 0,
+          total_intent: 0,
+          time_spent: 0
+        });
 
         io.to(returnID).emit('signin', 'success', profile.google_ID);
         console.log("New Account");
