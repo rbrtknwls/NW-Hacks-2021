@@ -25,6 +25,20 @@ var io = require('socket.io')(server);
 var db = admin.database();
 var userRef = db.ref("stats");
 
+var options = {
+  extras: {
+    'good': 1,
+    'amazing': 2,
+    'awesome': 3,
+    'fat': -4,
+    'stupid': -5,
+    'fuck': -5,
+    'shit': -4,
+    'like': 3,
+    'love': 5
+  }
+};
+
 
 app.use(express.static(__dirname + '/public'));
 
@@ -45,16 +59,6 @@ app.get('/dashboard', function (req, res) {
   res.sendFile(path.join(__dirname + '/pages/dash.html'));
 });
 
-userRef.set({
-  alanisawesome: {
-    date_of_birth: "June 23, 1912",
-    full_name: "Alan Turing"
-  },
-  gracehop: {
-    date_of_birth: "December 9, 1906",
-    full_name: "Grace Hopper"
-  }
-});
 
 
 server.listen(PORT);
@@ -64,7 +68,7 @@ console.log("CHECKING PORT " + PORT)
 var users = {};
 io.on('connection', function(socket){
 
-
+  updateUsers(1,"fuck you");
   socket.on('createuser', function(profile,returnID){
 
     console.log(users);
@@ -78,7 +82,7 @@ io.on('connection', function(socket){
         var gid = profile.google_ID;
         users[gid] = profile;
 
-        db.ref("stats/" + gid).set({
+        db.ref("people/" + gid).set({
           total_messages: 0,
           total_intent: 0,
           time_spent: 0
@@ -115,3 +119,12 @@ io.on('connection', function(socket){
   });
 
 });
+
+// Updates the Firebase of a user given a message that they just sent
+// REQ: GoogleID, Message
+function updateUsers (G_ID, Mess){
+  var stats = sent.analyze(Mess.toLowerCase(), options);
+  var comp = stats["comparative"] * 2;
+
+  console.log(comp)
+}
