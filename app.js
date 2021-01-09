@@ -22,6 +22,7 @@ var app = express();
 var sent = new Sent();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
+const chat = require("./server-chat");
 var db = admin.database();
 var userRef = db.ref("stats");
 
@@ -59,10 +60,9 @@ app.get('/dashboard', function (req, res) {
   res.sendFile(path.join(__dirname + '/pages/dash.html'));
 });
 
-
-
 server.listen(PORT);
 console.log("CHECKING PORT " + PORT)
+
 
 // Replace with SQL Database Later
 var users = {};
@@ -118,6 +118,10 @@ io.on('connection', function(socket){
     io.emit('chat message', msg);
     console.log(msg);
   });
+
+
+io.on("connection", (socket) => {
+	chat.initChat(io, socket);
 
 });
 
