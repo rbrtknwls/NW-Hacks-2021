@@ -1,25 +1,33 @@
 /// IMPORTS AND PRE REQS
 var express = require('express');
-var AWS = require('aws-sdk')
 var path = require('path');
 var fs = require('fs');
 var atob = require('atob')
-var im = require('imagemagick');
+var Sent = require('sentiment');
+var admin = require("firebase-admin");
 
 // CONSTANTS AND API KEYS
 const PORT = process.env.PORT || 3000;
-const config = {
-    accessKeyId: "",
-    secretAccessKey: "",
-    region: "us-east-2"
+// Fetch the service account key JSON file contents
+let serviceAccount = require('./secret_shhhh.json');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: 'https://nw-hacks-1cba2-default-rtdb.firebaseio.com/'
+});
 
 
-};
+// Initialize the app with a null auth variable, limiting the server's access
+
+
 
 // Instancate OBJECTS
 var app = express();
+var sent = new Sent();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
+var db = admin.database();
+var ref = db.ref("server/saving-data/fireblog");
 
 
 app.use(express.static(__dirname + '/public'));
@@ -43,6 +51,17 @@ app.get('/dashboard', function (req, res) {
 
 
 
+var usersRef = ref.child("users");
+usersRef.set({
+  alanisawesome: {
+    date_of_birth: "June 23, 1912",
+    full_name: "Alan Turing"
+  },
+  gracehop: {
+    date_of_birth: "December 9, 1906",
+    full_name: "Grace Hopper"
+  }
+});
 
 
 server.listen(PORT);
@@ -90,6 +109,7 @@ io.on('connection', function(socket){
 
 
   socket.on('chat message', function(msg){
+
     io.emit('chat message', msg);
     console.log(msg);
   });
