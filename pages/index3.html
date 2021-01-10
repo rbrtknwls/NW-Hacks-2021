@@ -409,6 +409,15 @@
       var image = document.getElementById('happy');
       image.src = "../assets/img/happy2.png";
   }
+  function sgroup(){
+    if (CURR_EMOTE == 0){
+      alert("Please pick an Emotion")
+    }else{
+      setCookie("emotion", CURR_EMOTE);
+      location.replace("/chat");
+    }
+  }
+
 </script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
@@ -420,6 +429,10 @@
     var pfp = getPFP();
     var email = getEmail();
     var usename = getUserName();
+    var thing = 0;
+
+
+
 
     socket.on('connect', () => {
       if (cookieCheck()){
@@ -431,10 +444,10 @@
           socket.emit('get_positvity', userid, socket.id);
           socket.emit('get_emotions', userid, socket.id);
           socket.emit('get_misc_stats', userid, socket.id);
-          
+
           socket.emit('get_quote', socket.id);
           function sgroup(){
-            socket.emit("ready_group", userid, CURR_EMOTE);
+            socket.emit("ready_group", userid, thing);
           }
 
           socket.on('peoplehelped', function(val){
@@ -450,7 +463,7 @@
           });
 
           socket.on('timespent', function(val){
-            document.getElementById("tspent").innerHTML = val;
+            document.getElementById("tspent").innerHTML = parseInt(val);
           });
 
           socket.on('starsgot', function(val){
