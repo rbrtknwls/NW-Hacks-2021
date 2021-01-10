@@ -63,12 +63,15 @@ console.log("CHECKING PORT " + PORT);
 
 // Replace with SQL Database Later
 var users = {};
-var chatRoomQueue = [1];
+var pms = {};
+var chatRoomQueue = [];
+
 var roomCtr = 1;
+
+
 io.on("connection", function (socket) {
 
   socket.on("createuser", function (profile, returnID) {
-    console.log(users);
     try {
       if (profile.google_ID in users) {
         //Log in normally
@@ -119,12 +122,10 @@ io.on("connection", function (socket) {
   });
 
   socket.on("getInfo", function (id, sender) {
-    console.log(id);
     io.to(sender).emit("postInfo", users[id]);
   });
 
   socket.on("getUsers", function (sender) {
-    console.log("Returned Users");
     io.to(sender).emit("postUsers", users);
   });
 
@@ -149,8 +150,6 @@ io.on("connection", function (socket) {
     setTimeout(function () {
 
       val = ((g_intent+5)/g_mess)*10;
-      console.log(g_intent);
-      console.log(g_mess);
       io.to(sender).emit("buildpos", val);
 
     }, 2000);
@@ -223,27 +222,55 @@ io.on("connection", function (socket) {
 
       });
     });
+  });
+
+  socket.on("comparepartners", function (sender) {
+
+    if (chatRoomQueue.length >= 2){
+        pms[chatRoomQueue[0]] = chatRoomQueue[1];
+        pms[chatRoomQueue[1]] = chatRoomQueue[0];
+
+        chatRoomQueue.pop()
+        chatRoomQueue.pop()
+
+    }
+
+    console.log(pms)
+    if (chatRoomQueue.includes(sender)){
+      console.log(chatRoomQueue);
+      setTimeout(function () {
+        io.to(sender).emit("checkforpartner", "spare");
+      }, 2000);
+    }
+
+
+  });
+
+  socket.on("lookingforroom", function (sender) {
+
+    if (sender != undefined){
+      console.log(chatRoomQueue);
+
+      chatRoomQueue.push(sender);
+
+      io.to(sender).emit("checkforpartner", "spare");
+    }
 
 
   });
 
   socket.on("disconnect", function () {
-    socket.leave(socket.room);
-    var clientsInRoom = io.nsps["/"].adapter.rooms[socket.room];
-    var numClients =
-      clientsInRoom === undefined
-        ? 0
-        : Object.keys(clientsInRoom.sockets).length;
-    console.log(socket.username + " got disconnected!");
-    console.log(numClients + " clients in room: " + socket.room);
-    if (chatRoomQueue[0] !== socket.room) {
-      chatRoomQueue.unshift(socket.room);
+    var index = chatRoomQueue.indexOf(socket.id);
+    if (index !== -1) {
+      chatRoomQueue.splice(index, 1);
     }
-    io.in(socket.room).emit(
-      "chat message",
-      socket.username + " has left the chat."
-    );
-    console.log(chatRoomQueue);
+    var x = pms[socket.id];
+    delete pms[socket.id];
+    delete pms[x];
+    console.log(x);
+    console.log(socket.id);
+    io.to(socket.id).emit("chat message", "PARTNER LEFT PLEASE REFRESH");
+    io.to(x).emit("chat message", "PARTNER LEFT PLEASE REFRESH");
   });
 
   socket.on("joinRoom", function (socketId, username) {
