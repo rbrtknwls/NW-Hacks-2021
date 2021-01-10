@@ -1,118 +1,117 @@
 function setCookie(cname, cvalue) {
   var d = new Date();
   d.setTime(d.getTime() + 200000000);
-  var expires = "expires="+ d.toUTCString();
+  var expires = "expires=" + d.toUTCString();
   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
-function authSucc(){
+function authSucc() {
   location.replace("/dashboard");
 }
-function authFail(){
+function authFail() {
   location.replace("/");
 }
 
-function cookieCheck(){
+function cookieCheck() {
   var cookies = document.cookie;
   cookies = cookies.split(";");
-  for (var i = 0; i < cookies.length; i++){
+  for (var i = 0; i < cookies.length; i++) {
     var key = cookies[i].split("=")[0];
-    if (key.localeCompare(" userid") == 0){
-      return(true);
+    if (key.localeCompare(" userid") == 0) {
+      return true;
     }
   }
-  return(false);
+  return false;
 }
 
-function getUserId(){
+function getUserId() {
   var cookies = document.cookie;
   var state = false;
   cookies = cookies.split(";");
-  for (var i = 0; i < cookies.length; i++){
+  for (var i = 0; i < cookies.length; i++) {
     var key = cookies[i].split("=")[0];
     var sotr = cookies[i].split("=")[1];
-    if (key.localeCompare(" userid") == 0){
-      return (sotr);
+    if (key.localeCompare(" userid") == 0) {
+      return sotr;
     }
   }
-  return (false);
+  return false;
 }
 
 function getUserName() {
-	var cookies = document.cookie;
-	var state = false;
-	cookies = cookies.split(";");
-	for (var i = 0; i < cookies.length; i++) {
-		var key = cookies[i].split("=")[0];
-		var sotr = cookies[i].split("=")[1];
-		if (key.localeCompare(" username") == 0) {
-			return sotr;
-		}
-	}
-	return false;
-}
-
-function getPFP(){
   var cookies = document.cookie;
   var state = false;
   cookies = cookies.split(";");
-  for (var i = 0; i < cookies.length; i++){
+  for (var i = 0; i < cookies.length; i++) {
     var key = cookies[i].split("=")[0];
     var sotr = cookies[i].split("=")[1];
-    if (key.localeCompare(" userimg") == 0){
-      return (sotr);
+    if (key.localeCompare(" username") == 0) {
+      return sotr;
     }
   }
-  return (false);
+  return false;
 }
 
-function getEmail(){
+function getPFP() {
   var cookies = document.cookie;
   var state = false;
   cookies = cookies.split(";");
-  for (var i = 0; i < cookies.length; i++){
+  for (var i = 0; i < cookies.length; i++) {
     var key = cookies[i].split("=")[0];
     var sotr = cookies[i].split("=")[1];
-    if (key.localeCompare(" useremail") == 0){
-      return (sotr);
+    if (key.localeCompare(" userimg") == 0) {
+      return sotr;
     }
   }
-  return (false);
+  return false;
 }
 
-function createUserCard(name, email, id){
-  console.log('yes');
-  var newCol = document.createElement('div');
+function getEmail() {
+  var cookies = document.cookie;
+  var state = false;
+  cookies = cookies.split(";");
+  for (var i = 0; i < cookies.length; i++) {
+    var key = cookies[i].split("=")[0];
+    var sotr = cookies[i].split("=")[1];
+    if (key.localeCompare(" useremail") == 0) {
+      return sotr;
+    }
+  }
+  return false;
+}
+
+function createUserCard(name, email, id) {
+  console.log("yes");
+  var newCol = document.createElement("div");
   newCol.className = "col";
 
-  var newCard = document.createElement('div');
+  var newCard = document.createElement("div");
   newCard.className = "card";
   newCard.style.width = "100%";
-  var row = document.createElement('div');
+  var row = document.createElement("div");
   row.className = "row no-gutters";
 
-  var col1 = document.createElement('div');
+  var col1 = document.createElement("div");
   col1.className = "col-10";
 
-  var newCardBody = document.createElement('div');
-  newCardBody.className = 'card-body';
+  var newCardBody = document.createElement("div");
+  newCardBody.className = "card-body";
 
-  var newCardTitle = document.createElement('h5');
-  newCardTitle.className = 'card-title';
+  var newCardTitle = document.createElement("h5");
+  newCardTitle.className = "card-title";
   var t = document.createTextNode(name);
   newCardTitle.appendChild(t);
 
-  var newCardText = document.createElement('p');
-  newCardText.className = 'card-text';
+  var newCardText = document.createElement("p");
+  newCardText.className = "card-text";
   t = document.createTextNode(email);
   newCardText.appendChild(t);
 
-
-  var col2 = document.createElement('div');
+  var col2 = document.createElement("div");
   col2.className = "col-2 align-self-center";
 
-  var newButton = document.createElement('a');
-  newButton.className = 'btn btn-primary';
+  var newButton = document.createElement("a");
+  newButton.className = "btn btn-primary";
   newButton.style.width = "90%";
   newButton.style.padding = "10px";
   t = document.createTextNode("Chat");
@@ -132,5 +131,5 @@ function createUserCard(name, email, id){
 
   document.getElementById(id).appendChild(newCol);
 
-  return (false);
+  return false;
 }

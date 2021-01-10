@@ -35,6 +35,8 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/main.js"></script>
 
+
+
   </head>
   <body style="background: linear-gradient( rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) ), url(../assets/img/bg_hero_1.svg) no-repeat center center fixed; background-size: cover;">
 
@@ -213,36 +215,39 @@
     <div class="row">
       <div class="col">
         <div class="d-flex justify-content-center">
+        
+
+            <img id= "snore" src="../assets/img/snore.png"  style = "width: 60%; left: 25%" class="card-img-top" alt="..." onclick="changeImage()" />
+        
+          
+        </div>
+      </div>
+      <div class="col">
+        <div class="d-flex justify-content-center">
           </a>
-            <img src="../assets/img/snore.png"  style = "width: 60%; left: 25%" class="card-img-top" alt="...">
+
+            <img id= "anxious" src="../assets/img/anxious.png"  style = "width: 60%; left: 25%" class="card-img-top" alt="..." onclick="changeImage2()" >
           </a>
         </div>
       </div>
       <div class="col">
         <div class="d-flex justify-content-center">
           </a>
-            <img src="../assets/img/anxious.png"  style = "width: 60%; left: 25%" class="card-img-top" alt="...">
+            <img id= "angry"src="../assets/img/angry.png"  style = "width: 60%; left: 25%" class="card-img-top" alt="..." onclick="changeImage3()">
           </a>
         </div>
       </div>
       <div class="col">
         <div class="d-flex justify-content-center">
           </a>
-            <img src="../assets/img/angry.png"  style = "width: 60%; left: 25%" class="card-img-top" alt="...">
+            <img id= "nervous"src="../assets/img/nervous.png"  style = "width: 60%; left: 25%" class="card-img-top" alt="..." onclick="changeImage4()">
           </a>
         </div>
       </div>
       <div class="col">
         <div class="d-flex justify-content-center">
           </a>
-            <img src="../assets/img/nervous.png"  style = "width: 60%; left: 25%" class="card-img-top" alt="...">
-          </a>
-        </div>
-      </div>
-      <div class="col">
-        <div class="d-flex justify-content-center">
-          </a>
-            <img src="../assets/img/happy.png"  style = "width: 60%; left: 25%" class="card-img-top" alt="...">
+            <img id="happy" src="../assets/img/happy.png"  style = "width: 60%; left: 25%" class="card-img-top" alt="..." onclick="changeImage5()">
           </a>
         </div>
       </div>
@@ -353,6 +358,66 @@
   </div>
 
 </div>
+
+<script>
+  function changeImage() {
+      var image = document.getElementById('snore');
+      if (image.src.match("../assets/img/snore.png")) {
+          image.src = "../assets/img/snore2.png";
+      }
+      else {
+          image.src = "../assets/img/snore.png";
+      }
+  }
+</script>
+
+<script>
+  function changeImage2() {
+      var image = document.getElementById('anxious');
+      if (image.src.match("../assets/img/anxious.png")) {
+          image.src = "../assets/img/anxious2.png";
+      }
+      else {
+          image.src = "../assets/img/anxious.png";
+      }
+  }
+</script>
+
+<script>
+  function changeImage3() {
+      var image = document.getElementById('angry');
+      if (image.src.match("../assets/img/angry.png")) {
+          image.src = "../assets/img/angry2.png";
+      }
+      else {
+          image.src = "../assets/img/angry.png";
+      }
+  }
+</script>
+
+<script>
+  function changeImage4() {
+      var image = document.getElementById('nervous');
+      if (image.src.match("../assets/img/nervous.png")) {
+          image.src = "../assets/img/nervous2.png";
+      }
+      else {
+          image.src = "../assets/img/nervous.png";
+      }
+  }
+</script>
+
+<script>
+  function changeImage5() {
+      var image = document.getElementById('happy');
+      if (image.src.match("../assets/img/happy.png")) {
+          image.src = "../assets/img/happy2.png";
+      }
+      else {
+          image.src = "../assets/img/happy.png";
+      }
+  }
+</script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script>
