@@ -330,12 +330,9 @@
           <div class="col-5">
             <div class="card bg-transparent" style="border-top: 0px; border-right: 0px; border-bottom: 0px">
             <div class="card" style ="background-color: rgba(360, 360, 360, 0.2); margin: 2%">
-              <div class="card-body">
-                <h5 class="card-title">Emotional Distribution</h5>
-              </div>
               <div style="margin-top: -4%; margin-bottom: 3%">
                 <div class="d-flex justify-content-center">
-                  <canvas id="emotions" width="100%" height="100%"></canvas>
+                  <canvas id="emotions" width="200px" height="200px"></canvas>
                 </div>
               </div>
             </div>
@@ -384,8 +381,56 @@
           });
 
           socket.on('starsgot', function(val){
-            console.log("A");
             document.getElementById("sgot").innerHTML = val;
+          });
+
+          socket.on('buildemo', function(angry, happy, nervous, sad, tired){
+            var average_chart = document.getElementById('emotions').getContext('2d');
+
+            var rating_doughnut_chart = new Chart(average_chart, {
+                type: 'radar',
+                data: {
+                    labels: ['Angry', 'Happy', 'Nervous', "Sad", "Tired"],
+                    datasets: [{
+                        label: 'Rating',
+                        data: [angry, happy, nervous, sad, tired],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(255, 206, 86, 1)',
+
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+
+                // Configuration options go here
+                options: {
+
+                    responsive:false,
+
+                    legend: {
+                        display: false
+                    }
+
+
+                }
+            });
+            console.log(angry)
+            console.log(happy)
+            console.log(nervous)
+            console.log(sad)
+            console.log(tired)
           });
 
           socket.on('buildpos', function(val){

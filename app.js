@@ -159,6 +159,48 @@ io.on("connection", function (socket) {
   });
 
   socket.on("get_misc_stats", function (G_ID, sender) {
+    var urlRef = db.ref().child("stat/" + G_ID +"/emotions");
+
+    var g_angry = 0;
+    var g_happy = 0;
+    var g_nervous = 0;
+    var g_sad = 0;
+    var g_tired = 0;
+
+    urlRef.once("value", function (snapshot) {
+      snapshot.forEach(function (child) {
+        if (child.key == "angry") {
+          g_angry = child.val();
+        }
+
+        if (child.key == "happy") {
+          g_happy = child.val();
+        }
+
+        if (child.key == "nervous") {
+          g_nervous = child.val();
+        }
+
+        if (child.key == "sad") {
+          g_sad = child.val();
+        }
+
+        if (child.key == "tired") {
+          g_tired = child.val();
+        }
+      });
+    });
+
+    setTimeout(function () {
+
+      io.to(sender).emit("buildemo", g_angry,g_happy,g_nervous,g_sad,g_tired);
+
+    }, 2000);
+
+
+  });
+
+  socket.on("get_misc_stats", function (G_ID, sender) {
     var urlRef = db.ref().child("stat/" + G_ID);
 
     urlRef.once("value", function (snapshot) {
