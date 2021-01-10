@@ -44,18 +44,6 @@
         outline: none;
         color: #fff;
       }
-
-      #messages {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-      }
-      #messages > li {
-        padding: 0.5rem 1rem;
-      }
-      #messages > li:nth-child(odd) {
-        background: #efefef;
-      }
     </style>
   </head>
   <body>
@@ -67,6 +55,11 @@
         <input id="input" autocomplete="off" /><button>Send</button>
       </form>
     </div>
+
+    <div id="particles-js" style="z-index: -99"></div>
+
+    <!-- particles.js lib - https://github.com/VincentGarreau/particles.js -->
+    <script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   </body>
 
   <script
