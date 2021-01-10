@@ -43,16 +43,16 @@
       var socket = io.connect();
 
       var userid = getUserId();
+      var pfp = getPFP();
+      var email = getEmail();
+      var usename = getUserName();
       socket.on('connect', () => {
         if (cookieCheck()){
-          socket.emit('getInfo', userid, socket.id);
 
-          socket.on('postInfo', function(info){
-            console.log(info);
-            document.getElementById("disname").innerHTML = info.name;
-            document.getElementById("useranme").innerHTML = info.email;
+            document.getElementById("profilephoto").src = pfp;
+            document.getElementById("profileemail").innerHTML = email;
+            document.getElementById("profilename").innerHTML = usename;
 
-          });
         } else {
           authFail();
         }
@@ -75,7 +75,7 @@
              </div>
             </div>
             <div class="col-md-4 offset-md-5">
-              <h2> "A Quote will go here"</h2>
+              <h2 style="font-style: italic;"> "A Quote will go here"</h2>
             </div>
           </div>
         </div>
@@ -269,11 +269,49 @@
     </div>
   </div>
 
-  <div class = "card text-center invisible">
-    <a  href="/stats">
-      <button class="btn btn-dark rounded-pill visible"><h1>View Your Global Stats</h1></button>
-  </a>
-  </div>
+  <div class = "card text-center" style="margin: 1.5%">
+    <div class = "card text-center" style="margin: 1.5%">
+    <div class="row">
+      <div class="col-3">
+        <div class="card" style = "border-bottom: 0px; border-left: 0px; border-top: 0px">
+          <div class="d-flex justify-content-center">
+            <img id = "profilephoto" class="card-img-top" src="..." alt="Card image cap" style = "margin-top: 1%;object-fit: cover; border-radius: 50%; max-width: 50%; border: 1px solid" alt="...">
+          </div>
+          <hr>
+          <div class="card-body">
+            <h3 id = "profileemail" style="font-weight: bold;"> Here is the email <h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-9">
+        <div class="card text-center" style="border-bottom: 0px; border-left: 0px; border-top: 0px">
+          <div class="row" style= "margin-top: 0.5%">
+            <div class="col-7 offset-md-1">
+              <div class="d-flex justify-content-start">
+                <h2 style = "font-weight: bold;"> <span id = "profilename">Insert Name<span></h2><h2>'s Social Good Analytics </h2>
+
+              </div>
+                <hr style="margin-top: -0.5%; border: 1px solid black;">
+            </div>
+            <div class="col-4">
+            </div>
+          </div>
+          <div class = "card bg-success text-center" style="margin: 1%">
+             <div class="card-header"><h3>Interactivity<h3></div>
+            <div class="row">
+            <div class="col-7">
+              People Helped:
+              Awards Gotten:
+            </div>
+            <div class="col-5">
+              Positivity
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div>
 </div>
 
 

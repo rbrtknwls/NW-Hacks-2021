@@ -38,6 +38,48 @@ function getUserId(){
   return (false);
 }
 
+function getUserName() {
+	var cookies = document.cookie;
+	var state = false;
+	cookies = cookies.split(";");
+	for (var i = 0; i < cookies.length; i++) {
+		var key = cookies[i].split("=")[0];
+		var sotr = cookies[i].split("=")[1];
+		if (key.localeCompare(" username") == 0) {
+			return sotr;
+		}
+	}
+	return false;
+}
+
+function getPFP(){
+  var cookies = document.cookie;
+  var state = false;
+  cookies = cookies.split(";");
+  for (var i = 0; i < cookies.length; i++){
+    var key = cookies[i].split("=")[0];
+    var sotr = cookies[i].split("=")[1];
+    if (key.localeCompare(" userimg") == 0){
+      return (sotr);
+    }
+  }
+  return (false);
+}
+
+function getEmail(){
+  var cookies = document.cookie;
+  var state = false;
+  cookies = cookies.split(";");
+  for (var i = 0; i < cookies.length; i++){
+    var key = cookies[i].split("=")[0];
+    var sotr = cookies[i].split("=")[1];
+    if (key.localeCompare(" useremail") == 0){
+      return (sotr);
+    }
+  }
+  return (false);
+}
+
 function createUserCard(name, email, id){
   console.log('yes');
   var newCol = document.createElement('div');

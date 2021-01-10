@@ -80,11 +80,12 @@
         socket.emit('createuser', profile, socket.id);
       }
 
-      socket.on('signin', function(state, id, name, img){
+      socket.on('signin', function(state, id, name, img, email){
         if (state == "success"){
           setCookie("userid", id);
           setCookie("username", name);
           setCookie("userimg", img);
+          setCookie("useremail", email);
           authSucc();
         }else{
           alert("Login failed, please try again")
