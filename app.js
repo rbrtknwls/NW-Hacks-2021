@@ -5,7 +5,7 @@ var fs = require("fs");
 var atob = require("atob");
 var Sent = require("sentiment");
 var admin = require("firebase-admin");
-
+const fetch = require('node-fetch');
 // CONSTANTS AND API KEYS
 const PORT = process.env.PORT || 3000;
 let serviceAccount = require("./secret_shhhh.json");
@@ -37,6 +37,10 @@ var options = {
   },
 };
 
+
+
+
+
 app.use(express.static(__dirname + "/public"));
 
 // PAGE BUILDING STUFF
@@ -64,13 +68,13 @@ console.log("CHECKING PORT " + PORT);
 // Replace with SQL Database Later
 var users = {};
 var pms = {};
+var id = {};
 var chatRoomQueue = [];
 
 var roomCtr = 1;
 
 
 io.on("connection", function (socket) {
-
   socket.on("createuser", function (profile, returnID) {
     try {
       if (profile.google_ID in users) {
@@ -127,6 +131,16 @@ io.on("connection", function (socket) {
 
   socket.on("getUsers", function (sender) {
     io.to(sender).emit("postUsers", users);
+  });
+
+  socket.on("get_quote", function (sender) {
+
+    fetch("https://quote-garden.herokuapp.com/api/v3/quotes/random")
+      .then(resp => resp.json())
+      .then(resp => {
+        io.to(sender).emit("postquote", resp.data[0].quoteText);
+      })
+      .catch(error => console.log('error: ', error))
   });
 
   socket.on("get_positvity", function (G_ID, sender) {
@@ -233,6 +247,9 @@ io.on("connection", function (socket) {
         io.to(chatRoomQueue[0]).emit("matchFound");
         io.to(chatRoomQueue[1]).emit("matchFound");
 
+        incperson(id[chatRoomQueue[0]]);
+        incperson(id[chatRoomQueue[1]]);
+
         chatRoomQueue.pop()
         chatRoomQueue.pop()
 
@@ -249,12 +266,14 @@ io.on("connection", function (socket) {
 
   });
 
-  socket.on("lookingforroom", function (sender) {
+  socket.on("lookingforroom", function (sender, userid) {
 
     if (sender != undefined){
       console.log(chatRoomQueue);
 
       chatRoomQueue.push(sender);
+
+      id[sender] = userid;
 
       io.to(sender).emit("checkforpartner", "spare");
     }
@@ -269,6 +288,7 @@ io.on("connection", function (socket) {
     }
     var x = pms[socket.id];
     delete pms[socket.id];
+    delete id[socket.id];
     delete pms[x];
     console.log(x);
     console.log(socket.id);
@@ -372,6 +392,21 @@ function updateUsers(G_ID, Mess, G_DAY) {
       }
     });
   });
+}
+
+function incperson(G_ID) {
+
+  var urlRef = db.ref().child("stat/" + G_ID);
+  urlRef.once("value", function (snapshot) {
+    snapshot.forEach(function (child) {
+      if (child.key == "total_chats") {
+        urlRef.update({
+          total_chats: 1 + child.val(),
+        });
+      }
+    });
+  });
+
 }
 
 // Given a google_ID will take the corrisponding number of messages and

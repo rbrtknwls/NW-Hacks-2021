@@ -54,7 +54,7 @@ var input = document.getElementById("input");
 socket.on("connect", function () {
 	var canmessage = false;
   console.log(socket.id);
-  socket.emit("lookingforroom", socket.id);
+  socket.emit("lookingforroom", socket.id, userid);
 });
 
 socket.on("checkforpartner", function () {
