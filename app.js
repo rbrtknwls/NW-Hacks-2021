@@ -69,7 +69,7 @@ console.log("CHECKING PORT " + PORT);
 var users = {};
 var pms = {};
 var id = {};
-var chatRoomQueue = [];
+var chatRoomQueue = [[],[],[],[],[],[]];
 
 var roomCtr = 1;
 
@@ -235,46 +235,60 @@ io.on("connection", function (socket) {
     });
   });
 
-  socket.on("comparepartners", function (sender) {
+  socket.on("comparepartners", function (sender, emotion) {
+    console.log(chatRoomQueue);
+    console.log(pms);
+    if (chatRoomQueue[emotion].length >= 2){
+        pms[chatRoomQueue[emotion][0]] = chatRoomQueue[1];
+        pms[chatRoomQueue[emotion][1]] = chatRoomQueue[0];
 
-    if (chatRoomQueue.length >= 2){
-        pms[chatRoomQueue[0]] = chatRoomQueue[1];
-        pms[chatRoomQueue[1]] = chatRoomQueue[0];
+        io.to(chatRoomQueue[emotion][0]).emit("matchFound", emotion);
+        io.to(chatRoomQueue[emotion][1]).emit("matchFound", emotion);
 
-        io.to(chatRoomQueue[0]).emit("matchFound");
-        io.to(chatRoomQueue[1]).emit("matchFound");
+        incperson(id[chatRoomQueue[emotion][0]]);
+        incperson(id[chatRoomQueue[emotion][1]]);
 
-        incperson(id[chatRoomQueue[0]]);
-        incperson(id[chatRoomQueue[1]]);
+        pms[chatRoomQueue[emotion][1]] = chatRoomQueue[emotion][0];
+        pms[chatRoomQueue[emotion][0]] = chatRoomQueue[emotion][1];
 
-        chatRoomQueue.pop()
-        chatRoomQueue.pop()
-
-      chatRoomQueue.pop();
-      chatRoomQueue.pop();
+        chatRoomQueue[emotion].pop()
+        chatRoomQueue[emotion].pop()
     }
 
-    console.log(pms);
-    console.log(id);
-    if (chatRoomQueue.includes(sender)) {
-      console.log(chatRoomQueue);
+    if (chatRoomQueue[emotion].includes(sender)) {
       setTimeout(function () {
         io.to(sender).emit("checkforpartner", "spare");
       }, 2000);
     }
   });
 
-  socket.on("lookingforroom", function (sender, userid) {
+  socket.on("emocon", function (sender, userid, emotion) {
 
     if (sender != undefined){
-      console.log(chatRoomQueue);
 
-      chatRoomQueue.push(sender);
+
+      chatRoomQueue[emotion].push(sender)
+
+      incemotion(userid, emotion);
 
       id[sender] = userid;
       id[sender*10] = Date.now() / 1000;
 
       io.to(sender).emit("checkforpartner", "spare");
+
+    }
+  });
+
+  socket.on("ready_group", function (userid, emote_group) {
+
+    if (sender != undefined){
+      console.log(chatRoomQueue);
+
+      chatRoomQueue[emote_group].push(ready_group);
+
+      id[sender] = userid;
+      id[sender*10] = Date.now() / 1000;
+
     }
   });
 
@@ -303,8 +317,6 @@ io.on("connection", function (socket) {
     delete id[x*10];
 
     delete pms[x];
-    console.log(x);
-    console.log(socket.id);
     io.to(socket.id).emit(
       "chat message",
       "Partner left the chat, please refresh",
@@ -426,6 +438,43 @@ function incperson(G_ID) {
 
 }
 
+function incemotion(G_ID, emotion) {
+
+  var urlRef = db.ref().child("stat/" + G_ID +"/emotions");
+  urlRef.once("value", function (snapshot) {
+    snapshot.forEach(function (child) {
+      if (child.key == "tired" && emotion == 1) {
+        urlRef.update({
+          tired: 1 + child.val(),
+        });
+      }
+      if (child.key == "sad" && emotion == 2) {
+        urlRef.update({
+          sad: 1 + child.val(),
+        });
+      }
+      if (child.key == "angry" && emotion == 3) {
+        urlRef.update({
+          angry: 1 + child.val(),
+        });
+      }
+      if (child.key == "nervous" && emotion == 4) {
+        urlRef.update({
+          nervous: 1 + child.val(),
+        });
+      }
+      if (child.key == "happy" && emotion == 5) {
+        urlRef.update({
+          happy: 1 + child.val(),
+        });
+      }
+    });
+  });
+
+}
+
+
+
 function inctime(time, G_ID) {
   if (isNaN(time)){
     time = 0;
@@ -437,7 +486,7 @@ function inctime(time, G_ID) {
     snapshot.forEach(function (child) {
       if (child.key == "time_spent") {
         urlRef.update({
-          time_spent: time.toFixed(2) + child.val(),
+          time_spent: time + child.val(),
         });
       }
     });

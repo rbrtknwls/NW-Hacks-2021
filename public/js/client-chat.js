@@ -4,6 +4,7 @@ var day = new Date().getDate();
 
 var userid = getUserId();
 var username = getUserName();
+var emotion = getEmote();
 
 var canmessage;
 function getUserId() {
@@ -14,6 +15,20 @@ function getUserId() {
     var key = cookies[i].split("=")[0];
     var sotr = cookies[i].split("=")[1];
     if (key.localeCompare(" userid") == 0) {
+      return sotr;
+    }
+  }
+  return false;
+}
+
+function getEmote() {
+  var cookies = document.cookie;
+  var state = false;
+  cookies = cookies.split(";");
+  for (var i = 0; i < cookies.length; i++) {
+    var key = cookies[i].split("=")[0];
+    var sotr = cookies[i].split("=")[1];
+    if (key.localeCompare(" emotion") == 0) {
       return sotr;
     }
   }
@@ -54,17 +69,34 @@ var input = document.getElementById("input");
 socket.on("connect", function () {
   var canmessage = false;
   console.log(socket.id);
-  socket.emit("lookingforroom", socket.id, userid);
+  socket.emit("emocon", socket.id, userid, emotion);
 });
 
 socket.on("checkforpartner", function () {
   console.log(socket.id);
-  socket.emit("comparepartners", socket.id);
+	console.log(emotion)
+  socket.emit("comparepartners", socket.id, emotion);
 });
 
-socket.on("matchFound", function () {
+socket.on("matchFound", function (emo) {
   canmessage = true;
-  document.getElementById("waiting-msg").innerHTML = "Start chatting!";
+	console.log(emo)
+	var message = "Start chatting!";
+	if (emo == 1){
+		message += " (You both are Tired)"
+	}
+	if (emo == 2){
+		message += " (You both are Sad)"
+	}
+	if (emo == 3){
+		message += " (You both are Angry)"
+	}
+	if (emo == 4){
+		message += " (You both are Nervous)"
+	}else {
+		message += " (You both are Happy)"
+	}
+  document.getElementById("waiting-msg").innerHTML = message;
 });
 
 form.addEventListener("submit", function (e) {
