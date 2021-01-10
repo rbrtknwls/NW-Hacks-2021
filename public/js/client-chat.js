@@ -52,8 +52,14 @@ var input = document.getElementById("input");
 
 socket.on("connect", function () {
   console.log(socket.id);
-  socket.emit("joinRoom", socket.id, username);
+  socket.emit("lookingforroom", socket.id);
 });
+
+socket.on("checkforpartner", function () {
+  console.log(socket.id);
+  socket.emit("comparepartners", socket.id);
+});
+
 
 socket.on("matchFound", function () {
   document.getElementById("waiting-msg").innerHTML = "Start chatting!";
@@ -68,6 +74,7 @@ form.addEventListener("submit", function (e) {
 });
 
 socket.on("chat message", function (msg) {
+	console.log("Ahh");
   var item = document.createElement("li");
   var imgsrc = getPFP();
   item.classList.add("mine");
