@@ -60,6 +60,7 @@ app.get("/dashboard", function(req, res) {
 app.get("/stats", function(req, res) {
 	res.sendFile(path.join(__dirname + "/pages/stats.html"));
 });
+
 app.get("/chat/:group", function(req, res) {
 	console.log(req.params.group);
 	var string = req.params.group;
