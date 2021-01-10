@@ -1,5 +1,7 @@
 #messagebox {
   position: relative;
+  margin-top: 2%;
+  height: 80veh;
   width: 60%;
   left: 20%;
   background: #ffffff;
@@ -63,7 +65,7 @@
     height: 100%;
     width: 100%;
     background: linear-gradient(
-      rgb(255, 143, 178) 0%,
+      rgb(68, 3, 112) 0%,
       rgb(167, 151, 255) 50%,
       rgb(0, 229, 255) 100%
     );
