@@ -22,7 +22,6 @@ var app = express();
 var sent = new Sent();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-const chat = require("./server-chat");
 var db = admin.database();
 var userRef = db.ref("stats");
 
