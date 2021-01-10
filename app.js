@@ -182,10 +182,7 @@ io.on("connection", function (socket) {
           if (words[i][word] <= -4) {
             sendalert = true;
             msg = msg.replace(word, "#".repeat(word.length));
-            console.log(msg);
           }
-          console.log(word); // 'a'
-          console.log(words[i][word]); // 'hello'
         }
       }
     }
