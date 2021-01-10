@@ -66,9 +66,11 @@ console.log("CHECKING PORT " + PORT)
 
 // Replace with SQL Database Later
 var users = {};
+var chatQueue = new Array();
+var chatRoom = 1;
 io.on('connection', function(socket){
 
-  updateUsers("106614920609667399319","fuck you");
+
   socket.on('createuser', function(profile,returnID){
 
     console.log(users);
@@ -82,7 +84,8 @@ io.on('connection', function(socket){
         var gid = profile.google_ID;
         users[gid] = profile;
 
-        db.ref("stat/" + gid).set({
+        var curruser = db.ref("stats").child(gid);
+        curruser.set({
           total_messages: 0,
           total_intent: 0,
           time_spent: 0
@@ -111,11 +114,36 @@ io.on('connection', function(socket){
     io.to(sender).emit('postUsers', users);
   });
 
+  socket.on("disconnect", function() {
+    console.log(socket.id + " got disconnected!");
+    var i = chatQueue.indexOf(socket);
+    chatQueue.splice(i, 1);
+    console.log(chatQueue);
+    io.in(socket.room).emit("chat message", socket.id + " has left the chat.");
+  });
 
-  socket.on('chat message', function(msg){
+  socket.on("joinRoom", function(socketId) {
+    chatQueue.push(socketId);
+    socket.join(chatRoom);
+    socket.room = chatRoom;
+    console.log(chatQueue);
+    if (chatQueue.length === 2) {
+      io.in(chatRoom).emit("matchFound", { msg: "hello world" });
+      chatQueue = [];
+      chatRoom += 1;
+      console.log(socket.room);
+      // console.log(chatQueue);
+      // console.log(chatRoom);
+    }
+  });
 
-    io.emit('chat message', msg);
-    console.log(msg);
+  socket.on("chat message", function(msg) {
+    //console.log("message: " + msg);
+    console.log("UPDATING USER WITH:" + msg);
+
+    updateUsers("106614920609667399319", msg);
+
+    io.in(socket.room).emit("chat message", msg);
   });
 
 });
@@ -123,11 +151,11 @@ io.on('connection', function(socket){
 // Updates the Firebase of a user given a message that they just sent
 // REQ: GoogleID, Message
 function updateUsers (G_ID, Mess){
-  var urlRef = db.ref().child("stat/" +G_ID);
+  var urlRef = db.ref().child("stats/" +G_ID);
 
   var stats = sent.analyze(Mess.toLowerCase(), options);
   var comp = stats["comparative"] * 2;
-  var num_mess = 1;
+  var tot_mess = 1;
 
 
   urlRef.once("value", function(snapshot) {
@@ -135,15 +163,15 @@ function updateUsers (G_ID, Mess){
 
       if (child.key == "total_intent"){
         comp += child.val();
-        db.ref().child("stat/" +G_ID).update({
+        db.ref().child("stats/" +G_ID).update({
           "total_intent": comp
         })
       };
 
       if (child.key == "total_messages"){
-        num_mess += child.val();
-        db.ref().child("stat/" +G_ID).update({
-          "total_messages": num_mess
+        tot_mess += child.val();
+        db.ref().child("stats/" +G_ID).update({
+          "total_messages": tot_mess
         })
       };
 
