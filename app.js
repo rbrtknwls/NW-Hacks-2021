@@ -84,7 +84,7 @@ io.on('connection', function(socket){
         var gid = profile.google_ID;
         users[gid] = profile;
 
-        var curruser = db.ref("stats").child(gid);
+        var curruser = db.ref("stat").child(gid);
         curruser.set({
           total_messages: 0,
           total_intent: 0,
