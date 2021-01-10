@@ -4,6 +4,7 @@
     <title>Socket.IO chat</title>
     <link rel="shortcut icon" href="../assets/emojione_beating-heart.png""
     type="image/x-icon" />
+    <link rel="stylesheet" href="../assets/css/mobster.css" />
     <style>
       body {
         margin: 0;
@@ -58,12 +59,14 @@
     </style>
   </head>
   <body>
-    <ul id="messages">
-      <li id="waiting-msg">Waiting for person...</li>
-    </ul>
-    <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
-    </form>
+    <div id="messagebox">
+      <ul id="messages">
+        <li id="waiting-msg">Waiting for person...</li>
+      </ul>
+      <form id="form" action="">
+        <input id="input" autocomplete="off" /><button>Send</button>
+      </form>
+    </div>
   </body>
 
   <script
