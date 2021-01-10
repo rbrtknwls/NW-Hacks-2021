@@ -284,12 +284,12 @@
             <div class="col-7">
               <div class="d-flex justify-content-center" style="margin-top: 6%; margin-bottom: 1%">
               <div class = "row">
-                <h4> People Helped: &nbsp; </h4> <h4 style="font-weight: bold;"> 0 </h4>
+                <h4> People Helped: &nbsp; </h4> <h4 id = "phelp" style="font-weight: bold;"> 0 </h4>
               </div>
             </div>
             <div class="d-flex justify-content-center" style="margin-top: 1%; margin-bottom: 1%">
               <div class = "row" style="margin-top: 1%; margin-bottom: 1%">
-                <h4> Awards Recieved: &nbsp; </h4> <h4 style="font-weight: bold;"> 0 </h4>
+                <h4> Awards Recieved: &nbsp; </h4> <h4 id = "sgot" style="font-weight: bold;"> 0 </h4>
               </div>
             </div>
             </div>
@@ -301,7 +301,7 @@
                 </div>
                 <div style="margin-top: -4%; margin-bottom: 1%">
                   <div class="d-flex justify-content-center">
-                    <canvas id="emotions" width="100%" height="100%"></canvas>
+                    <canvas id="impact" width="100%" height="100%"></canvas>
                   </div>
                 </div>
               </div>
@@ -318,12 +318,12 @@
           <div class="col-7">
             <div class="d-flex justify-content-center" style="margin-top: 6%; margin-bottom: 1%">
             <div class = "row">
-              <h4> Time Spent: &nbsp; </h4> <h4 style="font-weight: bold;"> 0 </h4>
+              <h4> Time Spent: &nbsp; </h4> <h4 id = tspent style="font-weight: bold;"> 0 </h4>
             </div>
           </div>
           <div class="d-flex justify-content-center" style="margin-top: 1%; margin-bottom: 1%">
             <div class = "row" style="margin-top: 1%; margin-bottom: 1%">
-              <h4> Groups Joined: &nbsp; </h4> <h4 style="font-weight: bold;"> 0 </h4>
+              <h4> # of Joined Groups: &nbsp; </h4> <h4 id = "gjoin" style="font-weight: bold;"> 0 </h4>
             </div>
           </div>
           </div>
@@ -335,7 +335,7 @@
               </div>
               <div style="margin-top: -4%; margin-bottom: 3%">
                 <div class="d-flex justify-content-center">
-                  <canvas id="impact" width="100%" height="100%"></canvas>
+                  <canvas id="emotions" width="100%" height="100%"></canvas>
                 </div>
               </div>
             </div>
@@ -369,6 +369,24 @@
 
           socket.emit('get_positvity', userid, socket.id);
           socket.emit('get_emotions', userid, socket.id);
+          socket.emit('get_misc_stats', userid, socket.id);
+
+          socket.on('peoplehelped', function(val){
+            document.getElementById("phelp").innerHTML = val;
+          });
+
+          socket.on('groupsjoined', function(val){
+            document.getElementById("gjoin").innerHTML = val;
+          });
+
+          socket.on('timespent', function(val){
+            document.getElementById("tspent").innerHTML = val;
+          });
+
+          socket.on('starsgot', function(val){
+            console.log("A");
+            document.getElementById("sgot").innerHTML = val;
+          });
 
           socket.on('buildpos', function(val){
 
@@ -415,6 +433,8 @@
             });
 
         });
+
+
 
       } else {
         authFail();

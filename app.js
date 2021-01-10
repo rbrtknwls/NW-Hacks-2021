@@ -89,22 +89,26 @@ io.on("connection", function (socket) {
         db.ref("stat/" + gid).set({
           total_messages: 0,
           total_intent: 0,
+          total_chats: 0,
           total_stars: 0,
-          time_spent: 0,
+          total_groups: 0,
+          time_spent: 0
         });
         db.ref("stat/" + gid + "/emotions").set({
           angry: 0,
           sad: 0,
           tired: 0,
           nervous: 0,
-          happy: 0,
+          happy: 0
         });
 
         io.to(returnID).emit(
           "signin",
           "success",
           profile.google_ID,
-          profile.name
+          profile.name,
+          profile.image,
+          profile.email
         );
         console.log("New Account");
       }
@@ -150,6 +154,33 @@ io.on("connection", function (socket) {
       io.to(sender).emit("buildpos", val);
 
     }, 2000);
+
+
+  });
+
+  socket.on("get_misc_stats", function (G_ID, sender) {
+    var urlRef = db.ref().child("stat/" + G_ID);
+
+    urlRef.once("value", function (snapshot) {
+      snapshot.forEach(function (child) {
+        if (child.key == "total_chats") {
+            io.to(sender).emit("peoplehelped", child.val());
+        }
+
+        if (child.key == "total_stars") {
+            io.to(sender).emit("starsgot", child.val());
+        }
+
+        if (child.key == "total_groups") {
+            io.to(sender).emit("groupsjoined", child.val());
+        }
+
+        if (child.key == "time_spent") {
+            io.to(sender).emit("timespent", child.val());
+        }
+
+      });
+    });
 
 
   });
