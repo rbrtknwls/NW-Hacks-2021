@@ -77,7 +77,8 @@ io.on("connection", function (socket) {
           "signin",
           "success",
           profile.google_ID,
-          profile.name
+          profile.name,
+          profile.image
         );
         console.log("Norm Log");
       } else {
