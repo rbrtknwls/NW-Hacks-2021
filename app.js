@@ -77,7 +77,7 @@ io.on('connection', function(socket){
     try {
       if (profile.google_ID in users){
         //Log in normally
-        io.to(returnID).emit('signin', 'success', profile.google_ID);
+        io.to(returnID).emit('signin', 'success', profile.google_ID, profile.name);
         console.log("Norm Log");
       }else{
         //Create new account
