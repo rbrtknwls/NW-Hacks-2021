@@ -70,6 +70,8 @@ var chatRoom = 1;
 io.on('connection', function(socket){
 
 
+  get_toxicity("110319476096248364790")
+
   socket.on('createuser', function(profile,returnID){
 
     console.log(users);
@@ -177,5 +179,44 @@ function updateUsers (G_ID, Mess){
 
     });
   });
+}
+
+// Given a google_ID will take the corrisponding number of messages and
+// Sum of intent and will return if the person is acting too toxic:
+// 1) SUM Intent over -200
+// 2) (Intent+20 / Num Messages)*20 < 2
+// Will change the score to 0.
+// REQ: GoogleID, Message
+function get_toxicity (G_ID){
+  var urlRef = db.ref().child("stat/" +G_ID);
+
+
+
+  var g_intent = 0;
+  var g_mess = 0;
+
+  urlRef.once("value", function(snapshot) {
+    snapshot.forEach(function(child) {
+      if (child.key == "total_intent"){
+        g_intent = child.val();
+      };
+
+      if (child.key == "total_messages"){
+        g_mess = child.val();
+      };
+
+    });
+  });
+
+  setTimeout(function(){
+    val = ((g_mess <= -200) || (((g_intent+20)/g_mess) <= -1));
+    console.log(g_mess);
+    console.log(g_intent);
+    console.log(val);
+  }, 2000);
+
+
+
+
 
 }
