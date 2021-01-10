@@ -5,6 +5,8 @@
 
 body {
   font-family: "Roboto", sans-serif;
+  background-image: url(../assets/img/bg_hero_1.svg)
+
 }
 
 /* Navbar */
@@ -59,16 +61,7 @@ nav ul {
   margin: 0;
 }
 
-/*Header */
 
-.header-container {
-  background: #e5e5e5 url("imgs/ellipse-3.png");
-  background-repeat: no-repeat;
-  background-position: 100%;
-  background-attachment: fixed;
-  background-size: 100% auto;
-  height: 100vh;
-}
 
 .logo-picture {
   position: absolute;

@@ -41,7 +41,7 @@ app.use(express.static(__dirname + "/public"));
 
 // PAGE BUILDING STUFF
 app.get("/", function (req, res) {
-  res.sendFile(path.join(__dirname + "/index.html"));
+  res.sendFile(path.join(__dirname + "/index3.html"));
 });
 app.get("/sign-in", function (req, res) {
   res.sendFile(path.join(__dirname + "/pages/auth.html"));

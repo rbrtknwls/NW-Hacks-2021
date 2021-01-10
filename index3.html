@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google-signin-client_id" content="823820203616-hqenb993r8fsetfhatqtc0ftqabj5o2a.apps.googleusercontent.com">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <meta name="description" content="Mobile Application HTML5 Template" />
+
+    <meta name="copyright" content="MACode ID, https://www.macodeid.com/" />
+
+    <title>Companion</title>
+
+    <link
+      rel="shortcut icon"
+      href="../assets/favicon.png"
+      type="image/x-icon"
+    />
+
+    <link rel="stylesheet" href="../assets/css/maicons.css" />
+
+    <link rel="stylesheet" href="../assets/vendor/animate/animate.css" />
+
+    <link
+      rel="stylesheet"
+      href="../assets/vendor/owl-carousel/css/owl.carousel.min.css"
+    />
+
+    <link rel="stylesheet" href="../assets/css/bootstrap.css" />
+
+    <link rel="stylesheet" href="../assets/css/mobster.css" />
+    <!-- Refs -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/main.js"></script>
+
+  </head>
+  <body style="background: url(../assets/img/bg_hero_1.svg) no-repeat center center fixed; background-size: cover;">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-floating">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <img src="../assets/emojione_beating-heart.png" alt="" />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarToggler"
+          aria-controls="navbarToggler"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarToggler">
+          <ul class="navbar-nav ml-lg-5 mt-3 mt-lg-0">
+            <li class="nav-item">
+              <a class="nav-link2">Companion</a>
+            </li>
+
+          </ul>
+          <div class="ml-auto my-2 my-lg-0">
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+          </div>
+        </div>
+      </div>
+      <div>
+
+      </div>
+    </nav>
+
+    <script>
+      var socket = io.connect();
+      function onSignIn(googleUser) {
+        var gdata = googleUser.getBasicProfile();
+
+        var profile = {
+          google_ID: gdata.getId(),
+          name: gdata.getName(),
+          image: gdata.getImageUrl(),
+          email: gdata.getEmail()
+        };
+
+        socket.emit('createuser', profile, socket.id);
+      }
+
+      socket.on('signin', function(state, id, name){
+        if (state == "success"){
+          setCookie("userid", id);
+          setCookie("username", name);
+        }else{
+          alert("Login failed, please try again")
+        }
+      });
+
+    </script>
+    <div class="card1" style="background-color: rgba(360, 360, 360, 0.2);width: 50%; margin-top: 10%; z-index: 100">
+    <div class="card text-center invisible">
+    <div class="card-body visible" style="background-color: rgba(360, 360, 360, 0.7)">
+      <div class="row">
+        <div class="col">
+          <div class="card text-center border-0">
+            <div class="d-flex justify-content-center">
+              </a>
+                <img src="../assets/img/image1.png"  style = "width: 50%; left: 25%" class="card-img-top visible" alt="...">
+              </a>
+            </div>
+            <div class="card-footer visible">
+              <small class="text-muted">TODO ADD NAME</small>
+            </div>
+          </div>
+        </div>
+        <div class="col invisible">
+          <div class="card text-center border-0">
+            <div class="d-flex justify-content-center">
+              </a>
+                <img src="../assets/img/image2.png"  style = "width: 50%; left: 25%" class="card-img-top visible" alt="...">
+              </a>
+            </div>
+            <div class="card-footer visible">
+              <small class="text-muted">TODO ADD NAME</small>
+            </div>
+          </div>
+        </div>
+        <div class="col invisible">
+          <div class="card text-center border-0">
+            <div class="d-flex justify-content-center">
+              </a>
+                <img src="../assets/img/image3.png"  style = "width: 50%; left: 25%" class="card-img-top visible" alt="...">
+              </a>
+            </div>
+            <div class="card-footer visible">
+              <small class="text-muted">TODO ADD NAME</small>
+            </div>
+          </div>
+        </div>
+        <div class="col invisible">
+          <div class="card text-center border-0">
+            <div class="d-flex justify-content-center">
+              </a>
+                <img src="../assets/img/image3.png"  style = "width: 50%; left: 25%" class="card-img-top visible" alt="...">
+              </a>
+            </div>
+            <div class="card-footer visible">
+              <small class="text-muted">TODO ADD NAME</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class = "card visible" style="z-index:100; margin: 7%">
+    <div class="mood">
+      <div class= "feeling">How are you feeling?</div>
+    </div>
+    <div class="row" style= "margin-top: 2%">
+      <div class="col">
+        <div class="d-flex justify-content-center">
+          </a>
+            <img src="../assets/img/snore.png"  style = "width: 60%; left: 25%" class="card-img-top" alt="...">
+          </a>
+        </div>
+      </div>
+      <div class="col">
+        <div class="d-flex justify-content-center">
+          </a>
+            <img src="../assets/img/anxious.png"  style = "width: 60%; left: 25%" class="card-img-top" alt="...">
+          </a>
+        </div>
+      </div>
+      <div class="col">
+        <div class="d-flex justify-content-center">
+          </a>
+            <img src="../assets/img/angry.png"  style = "width: 60%; left: 25%" class="card-img-top" alt="...">
+          </a>
+        </div>
+      </div>
+      <div class="col">
+        <div class="d-flex justify-content-center">
+          </a>
+            <img src="../assets/img/nervous.png"  style = "width: 60%; left: 25%" class="card-img-top" alt="...">
+          </a>
+        </div>
+      </div>
+      <div class="col">
+        <div class="d-flex justify-content-center">
+          </a>
+            <img src="../assets/img/happy.png"  style = "width: 60%; left: 25%" class="card-img-top" alt="...">
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="btn" style="margin-top: 2%">
+      <a  href="/chat">
+      <button class="btn btn-dark rounded-pill">Chat With Others in the Same Mood</button>
+    </a>
+    </div>
+  </div>
+
+  <div class = "card text-center invisible">
+    <a  href="/stats">
+      <button class="btn btn-dark rounded-pill visible"><h1>View Your Global Stats</h1></button>
+  </a>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+    <script src="../assets/js/jquery-3.5.1.min.js"></script>
+
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+
+    <script src="../assets/vendor/owl-carousel/js/owl.carousel.min.js"></script>
+
+    <script src="../assets/vendor/wow/wow.min.js"></script>
+
+    <script src="../assets/js/mobster.js"></script>
+  </body>
+
+</html>
