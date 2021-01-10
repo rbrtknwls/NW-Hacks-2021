@@ -249,11 +249,11 @@
     </div>
   </div>
 
-  <div class = "card text-center" style="margin: 1.5%">
+  <div class = "card text-center" style="margin: 1.5%;margin-top: 5%">
     <div class = "card text-center" style="margin: 1.5%;">
     <div class="row">
-      <div class="col-3">
-        <div class="card" style = "border-bottom: 0px; border-left: 0px; border-top: 0px">
+      <div class="col-4">
+        <div class="card" style = " border-left: 0px; border-top: 0px">
           <div class="d-flex justify-content-center">
             <img id = "profilephoto" class="card-img-top" src="..." alt="Card image cap" style = "margin-top: 1%;object-fit: cover; border-radius: 50%; max-width: 50%; border: 1px solid" alt="...">
           </div>
@@ -263,12 +263,12 @@
           </div>
         </div>
       </div>
-      <div class="col-9">
+      <div class="col-8">
         <div class="card text-center" style="border-bottom: 0px; border-left: 0px; border-top: 0px">
           <div class="row" style= "margin-top: 0.5%">
             <div class="col-7 offset-md-1">
               <div class="d-flex justify-content-start">
-                <h2 style = "font-weight: bold;"> <span id = "profilename">Insert Name<span></h2><h2>'s Social Good Analytics </h2>
+                <h2 style = "font-weight: bold;"> <span id = "profilename">Insert Name<span></h2><h2>'s Social Good: </h2>
 
               </div>
                 <hr style="margin-top: -0.5%; border: 1px solid black;">
@@ -276,8 +276,10 @@
             <div class="col-4">
             </div>
           </div>
+          <!-- interactivity -->
+          <div class = "row" style="margin-top: 3%">
+          <div class = "col-6">
           <div class = "card text-center" style="margin: 1%; background-color: rgba(11, 156, 49, 0.2)">
-             <div class="card-header"><h3>Interactivity<h3></div>
             <div class="row">
             <div class="col-7">
               <div class="d-flex justify-content-center" style="margin-top: 6%; margin-bottom: 1%">
@@ -295,11 +297,11 @@
               <div class="card bg-transparent" style="border-top: 0px; border-right: 0px; border-bottom: 0px">
               <div class="card" style ="background-color: rgba(360, 360, 360, 0.2); margin: 2%">
                 <div class="card-body">
-                  <h5 class="card-title">Relativie Positivity Of Messages</h5>
+                  <h5 class="card-title">Positivity Of Messages</h5>
                 </div>
                 <div style="margin-top: -4%; margin-bottom: 1%">
                   <div class="d-flex justify-content-center">
-                    <canvas id="impact" width="100%" height="100%"></canvas>
+                    <canvas id="emotions" width="100%" height="100%"></canvas>
                   </div>
                 </div>
               </div>
@@ -307,10 +309,46 @@
             </div>
           </div>
         </div>
+      </div>
+
+        <!-- Personal Wellbeing -->
+<div class = "col-6">
+        <div class = "card text-center" style="margin: 1%; background-color: rgba(137, 196, 244, 0.2)">
+          <div class="row">
+          <div class="col-7">
+            <div class="d-flex justify-content-center" style="margin-top: 6%; margin-bottom: 1%">
+            <div class = "row">
+              <h4> Time Spent: &nbsp; </h4> <h4 style="font-weight: bold;"> 0 </h4>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center" style="margin-top: 1%; margin-bottom: 1%">
+            <div class = "row" style="margin-top: 1%; margin-bottom: 1%">
+              <h4> Groups Joined: &nbsp; </h4> <h4 style="font-weight: bold;"> 0 </h4>
+            </div>
+          </div>
+          </div>
+          <div class="col-5">
+            <div class="card bg-transparent" style="border-top: 0px; border-right: 0px; border-bottom: 0px">
+            <div class="card" style ="background-color: rgba(360, 360, 360, 0.2); margin: 2%">
+              <div class="card-body">
+                <h5 class="card-title">Emotional Distribution</h5>
+              </div>
+              <div style="margin-top: -4%; margin-bottom: 3%">
+                <div class="d-flex justify-content-center">
+                  <canvas id="impact" width="100%" height="100%"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
         </div>
       </div>
     </div>
-    <div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
@@ -330,6 +368,7 @@
           document.getElementById("profilename").innerHTML = usename;
 
           socket.emit('get_positvity', userid, socket.id);
+          socket.emit('get_emotions', userid, socket.id);
 
           socket.on('buildpos', function(val){
 
@@ -343,7 +382,7 @@
                     labels: ['Negative', 'Positive'],
                     datasets: [{
 
-                        data: [val, 100-val],    //**Enter data here!
+                        data: [100 - val, val],    //**Enter data here!
                         //15 is people helped
                         //16 is medals recieved
                         //17 is time spent helping
