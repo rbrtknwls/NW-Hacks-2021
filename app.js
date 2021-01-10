@@ -292,6 +292,13 @@ io.on("connection", function (socket) {
     }
   });
 
+  socket.on("givestar", function (sender) {
+    var x = pms[sender]
+    incstars(id[x])
+
+
+  });
+
   socket.on("disconnect", function () {
     var index = chatRoomQueue.indexOf(socket.id);
     if (index !== -1) {
@@ -438,6 +445,22 @@ function incperson(G_ID) {
 
 }
 
+function incstars(G_ID) {
+  console.log(G_ID)
+
+  var urlRef = db.ref().child("stat/" + G_ID);
+  urlRef.once("value", function (snapshot) {
+    snapshot.forEach(function (child) {
+      if (child.key == "total_stars") {
+        urlRef.update({
+          total_stars: 1 + child.val(),
+        });
+      }
+    });
+  });
+
+}
+
 function incemotion(G_ID, emotion) {
 
   var urlRef = db.ref().child("stat/" + G_ID +"/emotions");
@@ -486,7 +509,7 @@ function inctime(time, G_ID) {
     snapshot.forEach(function (child) {
       if (child.key == "time_spent") {
         urlRef.update({
-          time_spent: time + child.val(),
+          time_spent: parseInt(time) + parseInt(child.val()),
         });
       }
     });

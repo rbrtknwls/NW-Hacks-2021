@@ -7,6 +7,14 @@ var username = getUserName();
 var emotion = getEmote();
 
 var canmessage;
+
+function sendstar(){
+	if (canmessage){
+		document.getElementById("star").style = "color: orange";
+		console.log("SEND")
+		socket.emit("givestar", socket.id);
+	}
+}
 function getUserId() {
   var cookies = document.cookie;
   var state = false;
