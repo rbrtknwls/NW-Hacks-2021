@@ -1,37 +1,90 @@
-figure{
-    width:300px;
-    overflow: hidden;
-    margin:0;
+* {
+  box-sizing: border-box;
+  margin: 0;
 }
-figure img
-{
-    display:block; /*remove inline-block spaces*/
-}
-@import 'https://fonts.googleapis.com/css?family=Roboto+Mono:100';
-h1{
-  font-family: 'Roboto Mono', monospace;
-  font-size: 75px;
-}
-h4{
-  font-family: 'Roboto Mono', monospace;
 
+body {
+  font-family: "Roboto", sans-serif;
 }
-.centerdiv {
-  min-height: 100%;
-  min-height: 100vh;
 
+/* Navbar */
+
+.nav-container {
+  background: #ffffff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  height: 72px;
+}
+
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+nav {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  height: 72px;
 }
-body{
-   height: 100%;
-    background-color: #ffffff;
-    background-image:linear-gradient(310deg, rgba(55,10,60,0.35) 30%, rgba(0, 228, 255, 0.35));
-    background-size: cover;
-    background-color: rgba(0, 0, 0, 0.2);
+
+nav ul {
+  display: flex;
 }
-.btn-side{
-    background-color: #8064A2 !important;
-    color: white !important;
+
+.logo-text {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 36px;
+  line-height: 42px;
+
+  color: #000000;
+  position: absolute;
+  width: 184px;
+  height: 36px;
+  left: 106px;
+  top: 17px;
+}
+
+.nav-items li {
+  list-style: none;
+  margin-right: 100px;
+  position: right;
+}
+
+#nav-btn-containers {
+  position: right;
+}
+.nav-items li:nth-last-child(1) {
+  margin: 0;
+}
+
+/*Header */
+
+.header-container {
+  background: #e5e5e5 url("imgs/ellipse-3.png");
+  background-repeat: no-repeat;
+  background-position: 100%;
+  background-attachment: fixed;
+  background-size: 100% auto;
+  height: 100vh;
+}
+
+.logo-picture {
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  left: 37px;
+  top: 9px;
+}
+.group-card {
+  position: absolute;
+  width: 559px;
+  height: 144px;
+  left: 440px;
+  top: 95px;
+
+  background: #ffffff;
+  box-shadow: 0px 4px 10px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
 }
