@@ -32,129 +32,79 @@
     <link rel="stylesheet" href="../assets/css/mobster.css" />
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light navbar-floating">
-      <div class="container">
-        <a class="navbar-brand" href="#">
-          <img src="../assets/emojione_beating-heart.png" alt="" />
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarToggler"
-          aria-controls="navbarToggler"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
 
-        <div class="collapse navbar-collapse" id="navbarToggler">
-          <ul class="navbar-nav ml-lg-5 mt-3 mt-lg-0">
-            <li class="nav-item">
-              <a class="nav-link2"
+    <div class="home-box">
 
+      
+          <div id="particles-js">
+            </div>
+            
 
-                >Companion</a
-              >
-            </li>
+  
 
-          </ul>
-          <div class="ml-auto my-2 my-lg-0">
-            <button class="btn btn-dark rounded-pill">Sign In</button>
-          </div>
-        </div>
-      </div>
-      <div>
-
-      </div>
-    </nav>
-    <div class = card2 style="z-index:100; position: fixed;">
-    <ul class="groups">
-      <li class="group-items">
-        <a href="#">
-          <img src="../assets/img/image1.png" alt=""/>
-        </a>
-      </li>
-      <li class="group-items">
-        <a href="#">
-          <img src="../assets/img/image2.png" alt=""/>
-        </a>
-      </li>
-      <li class="group-items">
-        <a href="#">
-          <img src="../assets/img/image3.png" alt=""/>
-        </a>
-      </li>
-      <li class="group-items">
-        <a href="#">
-          <img src="../assets/img/image3.png" alt=""/>
-        </a>
-      </li>
-      <li class="group-items">
-        <a href="#">
-          <img src="../assets/img/image3.png" alt=""/>
-        </a>
-      </li>
-    </ul>
-
-    </div>
-
+    <!-- particles.js lib - https://github.com/VincentGarreau/particles.js -->
+    <script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js">
+    </script>
+    <!-- stats.js lib -->
+    <script src="http://threejs.org/examples/js/libs/stats.min.js"></script>
     
 
 
-    <div class = card1 style="z-index:100; position: fixed;">
-      <div class="mood">
-        <div class= "feeling">How are you feeling?</div>
-      </div>
-      <ul class="groups">
-        <li class="group-items">
-          <a href="#">
-            <img src="../assets/img/snore.png" alt=""/>
-          </a>
-        </li>
-        <li class="group-items">
-          <a href="#">
-            <img src="../assets/img/anxious.png" alt=""/>
-          </a>
-        </li>
-        <li class="group-items">
-          <a href="#">
-            <img src="../assets/img/angry.png" alt=""/>
-          </a>
-        </li>
-        <li class="group-items">
-          <a href="#">
-            <img src="../assets/img/nervous.png" alt=""/>
-          </a>
-        </li>
-        <li class="group-items">
-          <a href="#">
-            <img src="../assets/img/happy.png" alt=""/>
-          </a>
-        </li>
-      </ul>
-      <div class="chat-btn">      
-        <a  href="/chat">
-   
-        <button class="btn btn-dark rounded-pill">Chat</button>
-      </a>
-      </div>
+    <div class = card5 style="z-index:100; position: fixed;">
+
+      <img class="logo" src="../assets/emojione_beating-heart.png">
+        <h1 class="title">Companion</h1>
+        <div class="desc-box">
+          <p class="desc">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta hic officiis sit nisi? Amet, voluptas!
+          </p>
+        </div>
+        <div class="landing-button">
+          <button class="btn btn-dark rounded-pill">Sign In</button>
+        </div>
+
+      
     </div>
 
-    <div class = card3 style="z-index:100; position: fixed;">
-      <a  href="/stats">
-        <div class="stat-button">
-        <button class="btn btn-dark rounded-pill">View Stats</button>
-      </div>
-    </a>
-    </div>
+
 
     <div
       class="page-hero-section bg-image hero-home-1"
       style="background-image: url(../assets/img/bg_hero_1.svg)"
     >
-      
+    <script>
+      var socket = io.connect();
+    
+      var userid = getUserId()
+      socket.on('connect', () => {
+        socket.emit('getusers', socket.id);
+    
+        socket.on('postusers', function (users) {
+          var all_users = Object.values(users);
+          console.log(all_users);
+        });
+    
+      });
+    
+    </script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
+    <script>
+    
+      /* ---- particles.js config ---- */
+    
+      particlesJS("particles-js",
+      {
+        "particles": {
+          "number":
+          { "value": 38, "density": { "enable": true, "value_area": 2171.430403899501 } }, "color": { "value": "#813CFB" }, "shape": { "type": "triangle", "stroke": { "width": 0, "color": "#813CFB" }, "polygon": { "nb_sides": 5 }, "image": { "src": "img/github.svg", "width": 100, "height": 100 } }, "opacity": { "value": 0.5, "random": false, "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false } }, "size": { "value": 3, "random": true, "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false } }, "line_linked": { "enable": true, "distance": 1122.388442605866, "color": "#813CFB", "opacity": 0.4, "width": 2 }, "move": { "enable": true, "speed": 6, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 } }
+        }, "interactivity": { "detect_on": "canvas", "events": { "onhover": { "enable": false, "mode": "repulse" }, "onclick": { "enable": false, "mode": "push" }, "resize": true }, "modes": { "grab": { "distance": 400, "line_linked": { "opacity": 1 } }, "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 }, "repulse": { "distance": 200, "duration": 0.4 }, "push": { "particles_nb": 4 }, "remove": { "particles_nb": 2 } } }, "retina_detect": true
+      });
+  
+    
+    </script>
+  
+    
 
 
     <script src="../assets/js/jquery-3.5.1.min.js"></script>
