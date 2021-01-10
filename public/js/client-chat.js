@@ -1,7 +1,16 @@
-var socket = io();
+var socket = io({ transports: ["websocket"], upgrade: false });
 
 var form = document.getElementById("form");
 var input = document.getElementById("input");
+
+socket.on("connect", function() {
+	console.log(socket.id);
+	socket.emit("joinRoom", socket.id);
+});
+
+socket.on("matchFound", function() {
+	document.getElementById("waiting-msg").innerHTML = "Start chatting!";
+});
 
 form.addEventListener("submit", function(e) {
 	e.preventDefault();
