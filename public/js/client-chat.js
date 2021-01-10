@@ -1,5 +1,7 @@
 var socket = io({ transports: ["websocket"], upgrade: false });
 
+var day = new Date().getDate();
+
 var userid = getUserId();
 var username = getUserName();
 
@@ -46,7 +48,7 @@ socket.on("matchFound", function() {
 form.addEventListener("submit", function(e) {
 	e.preventDefault();
 	if (input.value) {
-		socket.emit("chat message", input.value, username, userid);
+		socket.emit("chat message", input.value, username, userid, day);
 		input.value = "";
 	}
 });

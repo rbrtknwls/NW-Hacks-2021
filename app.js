@@ -64,6 +64,8 @@ var users = {};
 var chatRoomQueue = [1];
 var roomCtr = 1;
 io.on("connection", function(socket) {
+	get_toxicity("110319476096248364790");
+
 	socket.on("createuser", function(profile, returnID) {
 		console.log(users);
 		try {
@@ -77,11 +79,18 @@ io.on("connection", function(socket) {
 				var gid = profile.google_ID;
 				users[gid] = profile;
 
-				var curruser = db.ref("stat").child(gid);
-				curruser.set({
+				db.ref("stat/" + gid).set({
 					total_messages: 0,
 					total_intent: 0,
+					total_stars: 0,
 					time_spent: 0
+				});
+				db.ref("stat/" + gid + "/emotions").set({
+					angry: 0,
+					sad: 0,
+					tired: 0,
+					nervous: 0,
+					happy: 0
 				});
 
 				io.to(returnID).emit("signin", "success", profile.google_ID, profile.name);
@@ -139,13 +148,31 @@ io.on("connection", function(socket) {
 		}
 	});
 
-	socket.on("chat message", function(msg, username, fireref) {
+	socket.on("chat message", function(msg, username, fireref, date) {
 		//console.log("message: " + msg);
-		console.log("UPDATING USER WITH:" + msg);
 
-		updateUsers(fireref.toString(), msg);
+		updateUsers(fireref.toString(), msg, date);
 
-		io.in(socket.room).emit("chat message", username + ": " + msg);
+		var words = sent.analyze(msg.toLowerCase(), options)["calculation"];
+
+		var sendalert = false;
+
+		for (var i = 0; i < words.length; i++) {
+			for (var word in words[i]) {
+				if (words[i].hasOwnProperty(word)) {
+					if (words[i][word] <= -4) {
+						sendalert = true;
+						msg = msg.replace(word, "#".repeat(word.length));
+						console.log(msg);
+					}
+					console.log(word); // 'a'
+					console.log(words[i][word]); // 'hello'
+				}
+			}
+		}
+		console.log(sendalert);
+
+		io.in(socket.room).emit("chat message", username + ":" + msg);
 	});
 });
 
@@ -156,30 +183,70 @@ function NumClientsInRoom(namespace, room) {
 
 // Updates the Firebase of a user given a message that they just sent
 // REQ: GoogleID, Message
-function updateUsers(G_ID, Mess) {
-	console.log(G_ID);
-	var urlRef = db.ref().child("stat/" + G_ID);
-
+function updateUsers(G_ID, Mess, G_DAY) {
 	var stats = sent.analyze(Mess.toLowerCase(), options);
 	var comp = stats["comparative"] * 2;
-	var tot_mess = 1;
 
-	console.log(comp);
+	var urlRef = db.ref().child("stat/" + G_ID);
 	urlRef.once("value", function(snapshot) {
 		snapshot.forEach(function(child) {
 			if (child.key == "total_intent") {
-				comp += child.val();
-				db.ref().child("stat/" + G_ID).update({
-					total_intent: comp
+				urlRef.update({
+					total_intent: comp + child.val()
 				});
 			}
 
 			if (child.key == "total_messages") {
-				tot_mess += child.val();
-				db.ref().child("stat/" + G_ID).update({
-					total_messages: tot_mess
+				urlRef.update({
+					total_messages: 1 + child.val()
 				});
 			}
 		});
 	});
+
+	var urlReffar = db.ref().child("stat/" + G_ID + "/" + G_DAY);
+	urlReffar.once("value", function(snapshot) {
+		snapshot.forEach(function(child) {
+			if (child.key == "total_intent") {
+				urlReffar.update({
+					total_intent: comp + child.val()
+				});
+			}
+
+			if (child.key == "total_messages") {
+				urlReffar.update({
+					total_messages: 1 + child.val()
+				});
+			}
+		});
+	});
+}
+
+// Given a google_ID will take the corrisponding number of messages and
+// Sum of intent and will return if the person is acting too toxic:
+// 1) SUM Intent over -200
+// 2) (Intent+20 / Num Messages)*20 < 2
+// Will change the score to 0.
+// REQ: GoogleID, Message
+function get_toxicity(G_ID) {
+	var urlRef = db.ref().child("stat/" + G_ID);
+
+	var g_intent = 0;
+	var g_mess = 0;
+
+	urlRef.once("value", function(snapshot) {
+		snapshot.forEach(function(child) {
+			if (child.key == "total_intent") {
+				g_intent = child.val();
+			}
+
+			if (child.key == "total_messages") {
+				g_mess = child.val();
+			}
+		});
+	});
+
+	setTimeout(function() {
+		val = g_mess <= -200 || (g_intent + 20) / g_mess <= -1;
+	}, 2000);
 }
