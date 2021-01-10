@@ -143,7 +143,10 @@ io.on("connection", function (socket) {
     });
 
     setTimeout(function () {
-      val = ((g_intent*3+5)/g_mess)*10
+
+      val = ((g_intent+5)/g_mess)*10;
+      console.log(g_intent);
+      console.log(g_mess);
       io.to(sender).emit("buildpos", val);
 
     }, 2000);
