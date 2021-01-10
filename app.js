@@ -68,7 +68,7 @@ console.log("CHECKING PORT " + PORT)
 var users = {};
 io.on('connection', function(socket){
 
-  updateUsers(1,"fuck you");
+  updateUsers("106614920609667399319","fuck you");
   socket.on('createuser', function(profile,returnID){
 
     console.log(users);
@@ -82,8 +82,7 @@ io.on('connection', function(socket){
         var gid = profile.google_ID;
         users[gid] = profile;
 
-        var curruser = db.ref("stats").child(gid);
-        curruser.set({
+        db.ref("stat/" + gid).set({
           total_messages: 0,
           total_intent: 0,
           time_spent: 0
@@ -119,17 +118,36 @@ io.on('connection', function(socket){
     console.log(msg);
   });
 
-
-io.on("connection", (socket) => {
-	chat.initChat(io, socket);
-
 });
 
 // Updates the Firebase of a user given a message that they just sent
 // REQ: GoogleID, Message
 function updateUsers (G_ID, Mess){
+  var urlRef = db.ref().child("stat/" +G_ID);
+
   var stats = sent.analyze(Mess.toLowerCase(), options);
   var comp = stats["comparative"] * 2;
+  var num_mess = 1;
 
-  console.log(comp)
+
+  urlRef.once("value", function(snapshot) {
+    snapshot.forEach(function(child) {
+
+      if (child.key == "total_intent"){
+        comp += child.val();
+        db.ref().child("stat/" +G_ID).update({
+          "total_intent": comp
+        })
+      };
+
+      if (child.key == "total_messages"){
+        num_mess += child.val();
+        db.ref().child("stat/" +G_ID).update({
+          "total_messages": num_mess
+        })
+      };
+
+    });
+  });
+
 }
