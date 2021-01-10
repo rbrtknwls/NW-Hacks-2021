@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <meta name="google-signin-client_id" content="823820203616-hqenb993r8fsetfhatqtc0ftqabj5o2a.apps.googleusercontent.com">
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
     <meta name="description" content="Mobile Application HTML5 Template" />
@@ -30,6 +30,11 @@
     <link rel="stylesheet" href="../assets/css/bootstrap.css" />
 
     <link rel="stylesheet" href="../assets/css/mobster.css" />
+    <!-- Refs -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/main.js"></script>
+
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light navbar-floating">
@@ -52,16 +57,12 @@
         <div class="collapse navbar-collapse" id="navbarToggler">
           <ul class="navbar-nav ml-lg-5 mt-3 mt-lg-0">
             <li class="nav-item">
-              <a class="nav-link2"
-
-
-                >Companion</a
-              >
+              <a class="nav-link2">Companion</a>
             </li>
 
           </ul>
           <div class="ml-auto my-2 my-lg-0">
-            <button class="btn btn-dark rounded-pill">Sign In</button>
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
           </div>
         </div>
       </div>
@@ -69,6 +70,33 @@
 
       </div>
     </nav>
+
+    <script>
+      var socket = io.connect();
+      function onSignIn(googleUser) {
+        var gdata = googleUser.getBasicProfile();
+
+        var profile = {
+          google_ID: gdata.getId(),
+          name: gdata.getName(),
+          image: gdata.getImageUrl(),
+          email: gdata.getEmail()
+        };
+
+        socket.emit('createuser', profile, socket.id);
+      }
+
+      socket.on('signin', function(state, id, name){
+        if (state == "success"){
+          setCookie("userid", id);
+          setCookie("username", name);
+        }else{
+          alert("Login failed, please try again")
+        }
+      });
+
+    </script>
+
     <div class = card2 style="z-index:100; position: fixed;">
     <ul class="groups">
       <li class="group-items">
@@ -100,7 +128,7 @@
 
     </div>
 
-    
+
 
 
     <div class = card1 style="z-index:100; position: fixed;">
@@ -151,7 +179,7 @@
       class="page-hero-section bg-image hero-home-1"
       style="background-image: url(../assets/img/bg_hero_1.svg)"
     >
-      
+
 
 
     <script src="../assets/js/jquery-3.5.1.min.js"></script>
