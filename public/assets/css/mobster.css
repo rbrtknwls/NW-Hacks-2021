@@ -1,3 +1,67 @@
+#messagebox {
+  position: relative;
+  width: 80%;
+  height: 80%;
+  border: 1px solid black;
+  display: flex;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+#messages {
+  padding: 8px;
+  margin: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: white;
+  overflow: auto;
+  font: 16px/1.3 sans-serif;
+}
+
+.messages li {
+  list-style-type: none;
+  margin: 2px 8px 2px 0;
+  float: left;
+  border-radius: 8px;
+  padding: 8px;
+  color: black;
+  position: relative;
+  z-index: 1;
+  background: #eee;
+}
+
+.messages li.mine {
+  margin: 2px 0 2px 8px;
+  align-self: flex-end;
+  z-index: 0;
+  background: cyan;
+  color: white;
+}
+
+@supports (mix-blend-mode: screen) {
+  .messages-container:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(
+      rgb(255, 143, 178) 0%,
+      rgb(167, 151, 255) 50%,
+      rgb(0, 229, 255) 100%
+    );
+    mix-blend-mode: screen;
+    pointer-events: none;
+  }
+
+  .messages li.mine {
+    background: black;
+  }
+}
+
 .card1 {
   position: relative;
   width: 50%;
