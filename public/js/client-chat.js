@@ -52,7 +52,7 @@ var form = document.getElementById("form");
 var input = document.getElementById("input");
 
 socket.on("connect", function () {
-	var canmessage = false;
+  var canmessage = false;
   console.log(socket.id);
   socket.emit("lookingforroom", socket.id);
 });
@@ -62,9 +62,8 @@ socket.on("checkforpartner", function () {
   socket.emit("comparepartners", socket.id);
 });
 
-
 socket.on("matchFound", function () {
-	canmessage = true;
+  canmessage = true;
   document.getElementById("waiting-msg").innerHTML = "Start chatting!";
 });
 
@@ -77,21 +76,16 @@ form.addEventListener("submit", function (e) {
 });
 
 socket.on("chat message", function (msg, isender) {
-	if (isender){
-		var item = document.createElement("li");
-	  var imgsrc = getPFP();
-	  item.classList.add("mine");
-	  item.textContent = msg;
-	  messages.appendChild(item);
-	  window.scrollTo(0, document.body.scrollHeight);
-	}else{
-		var item = document.createElement("li");
-	  var imgsrc = getPFP();
-	  item.textContent = msg;
-	  messages.appendChild(item);
-	  window.scrollTo(0, document.body.scrollHeight);
-	}
-
+  var item = document.createElement("li");
+  var imgsrc = getPFP();
+  if (isender == 0) {
+    item.classList.add("mine");
+  } else if (isender == 1) {
+    item.classList.add("left");
+  }
+  item.textContent = msg;
+  messages.appendChild(item);
+  window.scrollTo(0, document.body.scrollHeight);
 });
 
 $(function () {
