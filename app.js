@@ -286,11 +286,19 @@ io.on("connection", function (socket) {
     var x = pms[socket.id];
     delete pms[socket.id];
 
-    inctime((Date.now() / 1000) - id[socket.id*10], id[socket.id])
+    var thing1 = (Date.now() / 1000) - id[socket.id*10];
+    if (isNaN(thing1)){
+      thing1 = 0;
+    }
+    inctime(thing1, id[socket.id])
     delete id[socket.id];
     delete id[socket.id*10];
 
-    inctime((Date.now() / 1000) - id[x*10], id[x])
+    var thing2 = (Date.now() / 1000) - id[x*10];
+    if (isNaN(thing2)){
+      thing2 = 0;
+    }
+    inctime(thing2, id[x])
     delete id[x];
     delete id[x*10];
 
@@ -429,7 +437,7 @@ function inctime(time, G_ID) {
     snapshot.forEach(function (child) {
       if (child.key == "time_spent") {
         urlRef.update({
-          time_spent: (time + child.val()).toFixed(2),
+          time_spent: time.toFixed(2) + child.val(),
         });
       }
     });
