@@ -20,6 +20,18 @@
   box-shadow: 0px 4px 10px 4px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
 }
+
+.card4 {
+  position: relative;
+  width: 50%;
+  left: 25%;
+  height: 80%;
+  top: 12%;
+
+  background: #ffffff;
+  box-shadow: 0px 4px 10px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
 .chat-button {
   background: linear-gradient(90.17deg, #ff6492 2.29%, #fff85b 100%);
 }
