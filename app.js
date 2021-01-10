@@ -66,7 +66,6 @@ var users = {};
 var chatRoomQueue = [1];
 var roomCtr = 1;
 io.on("connection", function (socket) {
-  get_toxicity("110319476096248364790");
 
   socket.on("createuser", function (profile, returnID) {
     console.log(users);
@@ -123,6 +122,33 @@ io.on("connection", function (socket) {
   socket.on("getUsers", function (sender) {
     console.log("Returned Users");
     io.to(sender).emit("postUsers", users);
+  });
+
+  socket.on("get_positvity", function (G_ID, sender) {
+    var urlRef = db.ref().child("stat/" + G_ID);
+
+    var g_intent = 0;
+    var g_mess = 0;
+
+    urlRef.once("value", function (snapshot) {
+      snapshot.forEach(function (child) {
+        if (child.key == "total_intent") {
+          g_intent = child.val();
+        }
+
+        if (child.key == "total_messages") {
+          g_mess = child.val();
+        }
+      });
+    });
+
+    setTimeout(function () {
+      val = ((g_intent*3+5)/g_mess)*10
+      io.to(sender).emit("buildpos", val);
+
+    }, 2000);
+
+
   });
 
   socket.on("disconnect", function () {
@@ -265,6 +291,8 @@ function get_toxicity(G_ID) {
   });
 
   setTimeout(function () {
-    val = g_mess <= -200 || (g_intent + 20) / g_mess <= -1;
+    val = ((g_intent*3+5)/g_mess)*10
+
+
   }, 2000);
 }

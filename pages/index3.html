@@ -39,26 +39,6 @@
   <body style="background: linear-gradient( rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) ), url(../assets/img/bg_hero_1.svg) no-repeat center center fixed; background-size: cover;">
 
 
-    <script>
-      var socket = io.connect();
-
-      var userid = getUserId();
-      var pfp = getPFP();
-      var email = getEmail();
-      var usename = getUserName();
-      socket.on('connect', () => {
-        if (cookieCheck()){
-
-            document.getElementById("profilephoto").src = pfp;
-            document.getElementById("profileemail").innerHTML = email;
-            document.getElementById("profilename").innerHTML = usename;
-
-        } else {
-          authFail();
-        }
-      });
-
-    </script>
 
     <div class="card" style="background-color: rgba(360, 360, 360, 0.1); margin-top: -0.1%">
 
@@ -270,7 +250,7 @@
   </div>
 
   <div class = "card text-center" style="margin: 1.5%">
-    <div class = "card text-center" style="margin: 1.5%">
+    <div class = "card text-center" style="margin: 1.5%;">
     <div class="row">
       <div class="col-3">
         <div class="card" style = "border-bottom: 0px; border-left: 0px; border-top: 0px">
@@ -335,49 +315,73 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script>
-    let impact_array = [0, 0, 0];
 
-    var impact_chart = document.getElementById('impact').getContext('2d');
+    var socket = io.connect();
 
-    var impact_doughnut_chart = new Chart(impact_chart, {
-        type: 'doughnut',
-        data: {
-            labels: ['People Helped', 'Medals Recieved', 'Time Spent Helping (min)'],
-            datasets: [{
+    var userid = getUserId();
+    var pfp = getPFP();
+    var email = getEmail();
+    var usename = getUserName();
+    socket.on('connect', () => {
+      if (cookieCheck()){
 
-                data: [15, 16, 17],    //**Enter data here!
-                //15 is people helped
-                //16 is medals recieved
-                //17 is time spent helping
+          document.getElementById("profilephoto").src = pfp;
+          document.getElementById("profileemail").innerHTML = email;
+          document.getElementById("profilename").innerHTML = usename;
 
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(109, 232, 126, 0.2)',
+          socket.emit('get_positvity', userid, socket.id);
 
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(81, 188, 96, 1)',
+          socket.on('buildpos', function(val){
 
-                ],
-                borderWidth: 1
-            }]
-        },
+            let impact_array = [0, 0, 0];
 
-        // Configuration options go here
-        options: {
+            var impact_chart = document.getElementById('impact').getContext('2d');
 
-            responsive:false,
+            var impact_doughnut_chart = new Chart(impact_chart, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Negative', 'Positive'],
+                    datasets: [{
 
-            legend: {
-                 display: false
-            }
+                        data: [val, 100-val],    //**Enter data here!
+                        //15 is people helped
+                        //16 is medals recieved
+                        //17 is time spent helping
+
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(109, 232, 126, 0.2)',
+
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(81, 188, 96, 1)',
+
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+
+                // Configuration options go here
+                options: {
+
+                    responsive:false,
+
+                    legend: {
+                         display: false
+                    }
 
 
-        }
+                }
+            });
+
+        });
+
+      } else {
+        authFail();
+      }
     });
+
     </script>
 
 
