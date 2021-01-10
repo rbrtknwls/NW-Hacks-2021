@@ -256,9 +256,7 @@
     </div>
     <hr>
     <div class="btn">
-      <a  href="/chat">
-      <button class="btn btn-dark rounded-pill">Chat With Others in the Same Mood</button>
-    </a>
+      <button class="btn btn-dark rounded-pill" onclick = "sgroup()">Chat With Others in the Same Mood</button>
     </div>
   </div>
 
@@ -362,6 +360,7 @@
 </div>
 
 <script>
+  var CURR_EMOTE = 0;
 
   function restart(){
     console.log("yee");
@@ -381,26 +380,31 @@
     image.src = "../assets/img/happy.png";
   }
   function changeImage() {
+    CURR_EMOTE = 1;
       restart();
       var image = document.getElementById('snore');
       image.src = "../assets/img/snore2.png";
   }
   function changeImage2() {
+    CURR_EMOTE = 2;
       restart();
       var image = document.getElementById('anxious');
       image.src = "../assets/img/anxious2.png";
   }
   function changeImage3() {
+    CURR_EMOTE = 3;
       restart();
       var image = document.getElementById('angry');
       image.src = "../assets/img/angry2.png";
   }
   function changeImage4() {
+    CURR_EMOTE = 4;
       restart();
       var image = document.getElementById('nervous');
       image.src = "../assets/img/nervous2.png";
   }
   function changeImage5() {
+    CURR_EMOTE = 5;
       restart();
       var image = document.getElementById('happy');
       image.src = "../assets/img/happy2.png";
@@ -416,6 +420,7 @@
     var pfp = getPFP();
     var email = getEmail();
     var usename = getUserName();
+
     socket.on('connect', () => {
       if (cookieCheck()){
 
@@ -426,7 +431,11 @@
           socket.emit('get_positvity', userid, socket.id);
           socket.emit('get_emotions', userid, socket.id);
           socket.emit('get_misc_stats', userid, socket.id);
+          
           socket.emit('get_quote', socket.id);
+          function sgroup(){
+            socket.emit("ready_group", userid, CURR_EMOTE);
+          }
 
           socket.on('peoplehelped', function(val){
             document.getElementById("phelp").innerHTML = val;
