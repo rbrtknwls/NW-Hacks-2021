@@ -73,7 +73,6 @@ var chatRoomQueue = [];
 
 var roomCtr = 1;
 
-
 io.on("connection", function (socket) {
   socket.on("createuser", function (profile, returnID) {
     try {
@@ -99,14 +98,14 @@ io.on("connection", function (socket) {
           total_chats: 0,
           total_stars: 0,
           total_groups: 0,
-          time_spent: 0
+          time_spent: 0,
         });
         db.ref("stat/" + gid + "/emotions").set({
           angry: 0,
           sad: 0,
           tired: 0,
           nervous: 0,
-          happy: 0
+          happy: 0,
         });
 
         io.to(returnID).emit(
@@ -162,17 +161,13 @@ io.on("connection", function (socket) {
     });
 
     setTimeout(function () {
-
-      val = ((g_intent+5)/g_mess)*10;
+      val = ((g_intent + 5) / g_mess) * 10;
       io.to(sender).emit("buildpos", val);
-
     }, 2000);
-
-
   });
 
   socket.on("get_misc_stats", function (G_ID, sender) {
-    var urlRef = db.ref().child("stat/" + G_ID +"/emotions");
+    var urlRef = db.ref().child("stat/" + G_ID + "/emotions");
 
     var g_angry = 0;
     var g_happy = 0;
@@ -205,12 +200,15 @@ io.on("connection", function (socket) {
     });
 
     setTimeout(function () {
-
-      io.to(sender).emit("buildemo", g_angry,g_happy,g_nervous,g_sad,g_tired);
-
+      io.to(sender).emit(
+        "buildemo",
+        g_angry,
+        g_happy,
+        g_nervous,
+        g_sad,
+        g_tired
+      );
     }, 2000);
-
-
   });
 
   socket.on("get_misc_stats", function (G_ID, sender) {
@@ -219,21 +217,20 @@ io.on("connection", function (socket) {
     urlRef.once("value", function (snapshot) {
       snapshot.forEach(function (child) {
         if (child.key == "total_chats") {
-            io.to(sender).emit("peoplehelped", child.val());
+          io.to(sender).emit("peoplehelped", child.val());
         }
 
         if (child.key == "total_stars") {
-            io.to(sender).emit("starsgot", child.val());
+          io.to(sender).emit("starsgot", child.val());
         }
 
         if (child.key == "total_groups") {
-            io.to(sender).emit("groupsjoined", child.val());
+          io.to(sender).emit("groupsjoined", child.val());
         }
 
         if (child.key == "time_spent") {
-            io.to(sender).emit("timespent", child.val());
+          io.to(sender).emit("timespent", child.val());
         }
-
       });
     });
   });
@@ -253,17 +250,18 @@ io.on("connection", function (socket) {
         chatRoomQueue.pop()
         chatRoomQueue.pop()
 
+      chatRoomQueue.pop();
+      chatRoomQueue.pop();
     }
 
-    console.log(pms)
-    if (chatRoomQueue.includes(sender)){
+    console.log(pms);
+    console.log(id);
+    if (chatRoomQueue.includes(sender)) {
       console.log(chatRoomQueue);
       setTimeout(function () {
         io.to(sender).emit("checkforpartner", "spare");
       }, 2000);
     }
-
-
   });
 
   socket.on("lookingforroom", function (sender, userid) {
@@ -274,11 +272,10 @@ io.on("connection", function (socket) {
       chatRoomQueue.push(sender);
 
       id[sender] = userid;
+      id[sender*10] = Date.now() / 1000;
 
       io.to(sender).emit("checkforpartner", "spare");
     }
-
-
   });
 
   socket.on("disconnect", function () {
@@ -288,12 +285,24 @@ io.on("connection", function (socket) {
     }
     var x = pms[socket.id];
     delete pms[socket.id];
+
+    inctime((Date.now() / 1000) - id[socket.id*10], id[socket.id])
     delete id[socket.id];
+    delete id[socket.id*10];
+
+    inctime((Date.now() / 1000) - id[x*10], id[x])
+    delete id[x];
+    delete id[x*10];
+
     delete pms[x];
     console.log(x);
     console.log(socket.id);
-    io.to(socket.id).emit("chat message", "PARTNER LEFT PLEASE REFRESH");
-    io.to(x).emit("chat message", "PARTNER LEFT PLEASE REFRESH");
+    io.to(socket.id).emit(
+      "chat message",
+      "Partner left the chat, please refresh",
+      1
+    );
+    io.to(x).emit("chat message", "Partner left the chat, please refresh", 1);
   });
 
   socket.on("joinRoom", function (socketId, username) {
@@ -341,10 +350,10 @@ io.on("connection", function (socket) {
       }
     }
 
-    var x = pms[sender]
+    var x = pms[sender];
 
-    io.to(sender).emit("chat message", username + ":" + msg, true);
-    io.to(x).emit("chat message", username + ":" + msg, false);
+    io.to(sender).emit("chat message", username + ":" + msg, 0);
+    io.to(x).emit("chat message", username + ":" + msg, 2);
   });
 });
 
@@ -409,6 +418,25 @@ function incperson(G_ID) {
 
 }
 
+function inctime(time, G_ID) {
+  if (isNaN(time)){
+    time = 0;
+  }
+  console.log(time);
+  console.log(G_ID);
+  var urlRef = db.ref().child("stat/" + G_ID);
+  urlRef.once("value", function (snapshot) {
+    snapshot.forEach(function (child) {
+      if (child.key == "time_spent") {
+        urlRef.update({
+          time_spent: (time + child.val()).toFixed(2),
+        });
+      }
+    });
+  });
+
+}
+
 // Given a google_ID will take the corrisponding number of messages and
 // Sum of intent and will return if the person is acting too toxic:
 // 1) SUM Intent over -200
@@ -434,8 +462,6 @@ function get_toxicity(G_ID) {
   });
 
   setTimeout(function () {
-    val = ((g_intent*3+5)/g_mess)*10
-
-
+    val = ((g_intent * 3 + 5) / g_mess) * 10;
   }, 2000);
 }

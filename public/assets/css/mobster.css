@@ -1,4 +1,3 @@
-
 #messagebox {
   position: relative;
   margin-top: 2%;
@@ -55,6 +54,14 @@
   z-index: 0;
   background: cyan;
   color: white;
+}
+#messages li.left {
+  background: #ffffff;
+  box-shadow: 0px 4px 10px 4px rgba(0, 0, 0, 0.1);
+  margin-left: 40vh;
+  border-radius: 12px;
+  color: white;
+  background: rgb(139, 139, 139);
 }
 
 @supports (mix-blend-mode: screen) {

@@ -360,62 +360,48 @@
 </div>
 
 <script>
+
+  function restart(){
+    console.log("yee");
+    var image = document.getElementById('snore');
+    image.src = "../assets/img/snore.png";
+
+    var image = document.getElementById('anxious');
+    image.src = "../assets/img/anxious.png";
+
+    var image = document.getElementById('angry');
+    image.src = "../assets/img/angry.png";
+
+    var image = document.getElementById('nervous');
+    image.src = "../assets/img/nervous.png";
+
+    var image = document.getElementById('happy');
+    image.src = "../assets/img/happy.png";
+  }
   function changeImage() {
+      restart();
       var image = document.getElementById('snore');
-      if (image.src.match("../assets/img/snore.png")) {
-          image.src = "../assets/img/snore2.png";
-      }
-      else {
-          image.src = "../assets/img/snore.png";
-      }
+      image.src = "../assets/img/snore2.png";
   }
-</script>
-
-<script>
   function changeImage2() {
+      restart();
       var image = document.getElementById('anxious');
-      if (image.src.match("../assets/img/anxious.png")) {
-          image.src = "../assets/img/anxious2.png";
-      }
-      else {
-          image.src = "../assets/img/anxious.png";
-      }
+      image.src = "../assets/img/anxious2.png";
   }
-</script>
-
-<script>
   function changeImage3() {
+      restart();
       var image = document.getElementById('angry');
-      if (image.src.match("../assets/img/angry.png")) {
-          image.src = "../assets/img/angry2.png";
-      }
-      else {
-          image.src = "../assets/img/angry.png";
-      }
+      image.src = "../assets/img/angry2.png";
   }
-</script>
-
-<script>
   function changeImage4() {
+      restart();
       var image = document.getElementById('nervous');
-      if (image.src.match("../assets/img/nervous.png")) {
-          image.src = "../assets/img/nervous2.png";
-      }
-      else {
-          image.src = "../assets/img/nervous.png";
-      }
+      image.src = "../assets/img/nervous2.png";
   }
-</script>
-
-<script>
   function changeImage5() {
+      restart();
       var image = document.getElementById('happy');
-      if (image.src.match("../assets/img/happy.png")) {
-          image.src = "../assets/img/happy2.png";
-      }
-      else {
-          image.src = "../assets/img/happy.png";
-      }
+      image.src = "../assets/img/happy2.png";
   }
 </script>
 
