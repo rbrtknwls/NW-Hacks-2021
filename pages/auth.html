@@ -36,9 +36,10 @@
         socket.emit('createuser', profile, socket.id);
       }
 
-      socket.on('signin', function(state, id){
+      socket.on('signin', function(state, id, name){
         if (state == "success"){
           setCookie("userid", id);
+          setCookie("username", name);
           authSuccess();
         }else{
           alert("Login failed, please try again")

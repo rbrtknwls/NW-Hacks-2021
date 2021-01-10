@@ -91,7 +91,7 @@ io.on('connection', function(socket){
           time_spent: 0
         });
 
-        io.to(returnID).emit('signin', 'success', profile.google_ID);
+        io.to(returnID).emit('signin', 'success', profile.google_ID, profile.name);
         console.log("New Account");
 
       }
@@ -137,13 +137,13 @@ io.on('connection', function(socket){
     }
   });
 
-  socket.on("chat message", function(msg) {
+  socket.on("chat message", function(msg,username,fireref) {
     //console.log("message: " + msg);
     console.log("UPDATING USER WITH:" + msg);
 
-    updateUsers("106614920609667399319", msg);
+    updateUsers((fireref).toString(), msg);
 
-    io.in(socket.room).emit("chat message", msg);
+    io.in(socket.room).emit("chat message", username + ":" + msg);
   });
 
 });
@@ -151,26 +151,27 @@ io.on('connection', function(socket){
 // Updates the Firebase of a user given a message that they just sent
 // REQ: GoogleID, Message
 function updateUsers (G_ID, Mess){
-  var urlRef = db.ref().child("stats/" +G_ID);
+  console.log(G_ID)
+  var urlRef = db.ref().child("stat/" +G_ID);
 
   var stats = sent.analyze(Mess.toLowerCase(), options);
   var comp = stats["comparative"] * 2;
   var tot_mess = 1;
 
-
+  console.log(comp)
   urlRef.once("value", function(snapshot) {
     snapshot.forEach(function(child) {
 
       if (child.key == "total_intent"){
         comp += child.val();
-        db.ref().child("stats/" +G_ID).update({
+        db.ref().child("stat/" +G_ID).update({
           "total_intent": comp
         })
       };
 
       if (child.key == "total_messages"){
         tot_mess += child.val();
-        db.ref().child("stats/" +G_ID).update({
+        db.ref().child("stat/" +G_ID).update({
           "total_messages": tot_mess
         })
       };
