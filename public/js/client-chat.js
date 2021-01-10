@@ -33,6 +33,20 @@ function getUserName() {
   return false;
 }
 
+function getPFP() {
+  var cookies = document.cookie;
+  var state = false;
+  cookies = cookies.split(";");
+  for (var i = 0; i < cookies.length; i++) {
+    var key = cookies[i].split("=")[0];
+    var sotr = cookies[i].split("=")[1];
+    if (key.localeCompare(" userimg") == 0) {
+      return sotr;
+    }
+  }
+  return false;
+}
+
 var form = document.getElementById("form");
 var input = document.getElementById("input");
 
@@ -55,6 +69,7 @@ form.addEventListener("submit", function (e) {
 
 socket.on("chat message", function (msg) {
   var item = document.createElement("li");
+  var imgsrc = getPFP();
   item.classList.add("mine");
   item.textContent = msg;
   messages.appendChild(item);
@@ -66,7 +81,7 @@ $(function () {
     event.preventDefault();
     var message = $(".message").first().clone();
     message.find("p").text($("input").val());
-    message.prependTo(".messagebox");
+    message.prependTo("#messagebox");
     $("input").val("");
   });
 });
