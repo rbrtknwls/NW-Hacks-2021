@@ -41,7 +41,7 @@ app.use(express.static(__dirname + "/public"));
 
 // PAGE BUILDING STUFF
 app.get("/", function (req, res) {
-  res.sendFile(path.join(__dirname + "/index3.html"));
+  res.sendFile(path.join(__dirname + "/index.html"));
 });
 app.get("/sign-in", function (req, res) {
   res.sendFile(path.join(__dirname + "/pages/auth.html"));
@@ -53,7 +53,7 @@ app.get("/chat", function (req, res) {
   res.sendFile(path.join(__dirname + "/pages/chat.html"));
 });
 app.get("/dashboard", function (req, res) {
-  res.sendFile(path.join(__dirname + "/pages/dash.html"));
+  res.sendFile(path.join(__dirname + "/pages/index3.html"));
 });
 app.get("/stats", function (req, res) {
   res.sendFile(path.join(__dirname + "/pages/stats.html"));

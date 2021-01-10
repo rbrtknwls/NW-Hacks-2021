@@ -5,6 +5,9 @@ function setCookie(cname, cvalue) {
   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
+function authSucc(){
+  location.replace("/dashboard");
+}
 function authFail(){
   location.replace("/");
 }

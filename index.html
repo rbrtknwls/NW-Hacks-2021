@@ -3,11 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-
     <meta name="description" content="Mobile Application HTML5 Template" />
-
+    <meta name="google-signin-client_id" content="823820203616-hqenb993r8fsetfhatqtc0ftqabj5o2a.apps.googleusercontent.com">
     <meta name="copyright" content="MACode ID, https://www.macodeid.com/" />
 
     <title>Companion</title>
@@ -17,26 +15,23 @@
       href="../assets/favicon.png"
       type="image/x-icon"
     />
-
     <link rel="stylesheet" href="../assets/css/maicons.css" />
-
     <link rel="stylesheet" href="../assets/vendor/animate/animate.css" />
-
     <link
       rel="stylesheet"
       href="../assets/vendor/owl-carousel/css/owl.carousel.min.css"
     />
-
     <link rel="stylesheet" href="../assets/css/bootstrap.css" />
-
     <link rel="stylesheet" href="../assets/css/mobster.css" />
   </head>
-  <body>
-
-    <div class="home-box">
+  <body style="background: url(../assets/img/bg_hero_1.svg) no-repeat center center fixed; background-size: cover;">
 
 
-          <div id="particles-js">
+
+
+
+
+          <div id="particles-js" style="z-index: -99">
             </div>
 
 
@@ -45,85 +40,54 @@
     <!-- particles.js lib - https://github.com/VincentGarreau/particles.js -->
     <script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js">
     </script>
-    <!-- stats.js lib -->
+    <!-- Refs -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/main.js"></script>
     <script src="http://threejs.org/examples/js/libs/stats.min.js"></script>
 
 
-
-    <div class = card5 style="z-index:100; position: fixed;">
-
-      <img class="logo" src="../assets/emojione_beating-heart.png">
-        <h1 class="title">Companion</h1>
-        <div class="desc-box">
-          <p class="desc">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta hic officiis sit nisi? Amet, voluptas!
-          </p>
+      <div class="jumbotron text-center" style="z-index: 999999;height: 40%; width: 30%; margin-left: 35%; margin-top: 10%; background-color: rgba(360, 360, 360, 0.9)">
+      <img class="card-img-top" src="../assets/emojione_beating-heart.png" alt="Card image cap" style="width: 30%">
+      <h1 class="display-4">Companion!</h1>
+      <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+      <hr class="my-4">
+      <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+      <p class="lead">
+        <div class="d-flex justify-content-center">
+          <div class="g-signin2" data-onsuccess="onSignIn"></div>
         </div>
-        <div class="landing-button">
-          <button class="btn btn-dark rounded-pill">Sign In</button>
-        </div>
-
-<<<<<<< HEAD
-    <div class = card1 style="z-index:100; position: fixed;">
-      <div class="mood">
-        <div class= "feeling">How are you feeling?</div>
-      </div>
-      <ul class="groups">
-        <li class="group-items">
-          <a href="#">
-            <img src="../assets/img/snore.png" alt=""/>
-          </a>
-        </li>
-        <li class="group-items">
-          <a href="#">
-            <img src="../assets/img/anxious.png" alt=""/>
-          </a>
-        </li>
-        <li class="group-items">
-          <a href="#">
-            <img src="../assets/img/angry.png" alt=""/>
-          </a>
-        </li>
-        <li class="group-items">
-          <a href="#">
-            <img src="../assets/img/nervous.png" alt=""/>
-          </a>
-        </li>
-        <li class="group-items">
-          <a href="#">
-            <img src="../assets/img/happy.png" alt=""/>
-          </a>
-        </li>
-      </ul>
-      <div class="chat-btn">
-        <a  href="/chat">
-
-        <button class="btn btn-dark rounded-pill">Chat</button>
-      </a>
-      </div>
-=======
-
->>>>>>> 1e40d3592620573b345d33fc0ad4ad92cf1d591c
+      </p>
     </div>
 
 
 
-    <div
-      class="page-hero-section bg-image hero-home-1"
-      style="background-image: url(../assets/img/bg_hero_1.svg)"
-    >
+
+
+
     <script>
       var socket = io.connect();
+      function onSignIn(googleUser) {
+        var gdata = googleUser.getBasicProfile();
 
-      var userid = getUserId()
-      socket.on('connect', () => {
-        socket.emit('getusers', socket.id);
+        var profile = {
+          google_ID: gdata.getId(),
+          name: gdata.getName(),
+          image: gdata.getImageUrl(),
+          email: gdata.getEmail()
+        };
 
-        socket.on('postusers', function (users) {
-          var all_users = Object.values(users);
-          console.log(all_users);
-        });
+        socket.emit('createuser', profile, socket.id);
+      }
 
+      socket.on('signin', function(state, id, name){
+        if (state == "success"){
+          setCookie("userid", id);
+          setCookie("username", name);
+          authSucc();
+        }else{
+          alert("Login failed, please try again")
+        }
       });
 
     </script>

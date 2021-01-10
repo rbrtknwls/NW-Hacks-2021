@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" href="../assets/css/mobster.css" />
     <!-- Refs -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/main.js"></script>
 
@@ -60,7 +61,6 @@
             </li>
 
           </ul>
-
         </div>
       </div>
       <div>
@@ -68,7 +68,31 @@
       </div>
     </nav>
 
+    <script>
+      var socket = io.connect();
+      function onSignIn(googleUser) {
+        var gdata = googleUser.getBasicProfile();
 
+        var profile = {
+          google_ID: gdata.getId(),
+          name: gdata.getName(),
+          image: gdata.getImageUrl(),
+          email: gdata.getEmail()
+        };
+
+        socket.emit('createuser', profile, socket.id);
+      }
+
+      socket.on('signin', function(state, id, name){
+        if (state == "success"){
+          setCookie("userid", id);
+          setCookie("username", name);
+        }else{
+          alert("Login failed, please try again")
+        }
+      });
+
+    </script>
     <div class="card1" style="background-color: rgba(360, 360, 360, 0.2);width: 50%; margin-top: 10%; z-index: 100">
     <div class="card text-center invisible">
     <div class="card-body visible" style="background-color: rgba(360, 360, 360, 0.7)">
