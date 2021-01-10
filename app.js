@@ -230,6 +230,9 @@ io.on("connection", function (socket) {
         pms[chatRoomQueue[0]] = chatRoomQueue[1];
         pms[chatRoomQueue[1]] = chatRoomQueue[0];
 
+        io.to(chatRoomQueue[0]).emit("matchFound");
+        io.to(chatRoomQueue[1]).emit("matchFound");
+
         chatRoomQueue.pop()
         chatRoomQueue.pop()
 
@@ -298,7 +301,7 @@ io.on("connection", function (socket) {
     }
   });
 
-  socket.on("chat message", function (msg, username, fireref, date) {
+  socket.on("chat message", function (msg, username, fireref, date, sender) {
     //console.log("message: " + msg);
 
     updateUsers(fireref.toString(), msg, date);
@@ -317,9 +320,11 @@ io.on("connection", function (socket) {
         }
       }
     }
-    console.log(sendalert);
 
-    io.in(socket.room).emit("chat message", username + ":" + msg);
+    var x = pms[sender]
+
+    io.to(sender).emit("chat message", username + ":" + msg, true);
+    io.to(x).emit("chat message", username + ":" + msg, false);
   });
 });
 

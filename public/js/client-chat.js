@@ -5,6 +5,7 @@ var day = new Date().getDate();
 var userid = getUserId();
 var username = getUserName();
 
+var canmessage;
 function getUserId() {
   var cookies = document.cookie;
   var state = false;
@@ -51,6 +52,7 @@ var form = document.getElementById("form");
 var input = document.getElementById("input");
 
 socket.on("connect", function () {
+	var canmessage = false;
   console.log(socket.id);
   socket.emit("lookingforroom", socket.id);
 });
@@ -62,25 +64,34 @@ socket.on("checkforpartner", function () {
 
 
 socket.on("matchFound", function () {
+	canmessage = true;
   document.getElementById("waiting-msg").innerHTML = "Start chatting!";
 });
 
 form.addEventListener("submit", function (e) {
   e.preventDefault();
-  if (input.value) {
-    socket.emit("chat message", input.value, username, userid, day);
+  if (input.value && canmessage) {
+    socket.emit("chat message", input.value, username, userid, day, socket.id);
     input.value = "";
   }
 });
 
-socket.on("chat message", function (msg) {
-	console.log("Ahh");
-  var item = document.createElement("li");
-  var imgsrc = getPFP();
-  item.classList.add("mine");
-  item.textContent = msg;
-  messages.appendChild(item);
-  window.scrollTo(0, document.body.scrollHeight);
+socket.on("chat message", function (msg, isender) {
+	if (isender){
+		var item = document.createElement("li");
+	  var imgsrc = getPFP();
+	  item.classList.add("mine");
+	  item.textContent = msg;
+	  messages.appendChild(item);
+	  window.scrollTo(0, document.body.scrollHeight);
+	}else{
+		var item = document.createElement("li");
+	  var imgsrc = getPFP();
+	  item.textContent = msg;
+	  messages.appendChild(item);
+	  window.scrollTo(0, document.body.scrollHeight);
+	}
+
 });
 
 $(function () {
